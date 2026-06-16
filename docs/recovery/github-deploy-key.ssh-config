@@ -1,0 +1,5 @@
+Host GitHub-daniel-conrad-tech-pages-deploy
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/daniel-conrad-tech.github.io_deploy
+  IdentitiesOnly yes
