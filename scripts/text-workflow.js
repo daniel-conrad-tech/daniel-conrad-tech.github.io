@@ -42,6 +42,73 @@ function renderInline(text) {
     );
 }
 
+const headingIconMap = new Map([
+    [
+        "△",
+        {
+            label: "Diagnose",
+            svg: `<svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5 19 18H5Z"></path></svg>`,
+        },
+    ],
+    [
+        "◌",
+        {
+            label: "Muster",
+            svg: `<svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="4.5" width="6" height="6" rx="1.2"></rect><rect x="13.5" y="4.5" width="6" height="6" rx="1.2"></rect><rect x="4.5" y="13.5" width="6" height="6" rx="1.2"></rect><rect x="13.5" y="13.5" width="6" height="6" rx="1.2"></rect></svg>`,
+        },
+    ],
+    [
+        "⚙",
+        {
+            label: "Mechanik",
+            svg: `<svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.1"></circle><path d="M12 3.8v2.1"></path><path d="M12 18.1v2.1"></path><path d="m18.2 5.8-1.5 1.5"></path><path d="m7.3 16.7-1.5 1.5"></path><path d="M20.2 12h-2.1"></path><path d="M5.9 12H3.8"></path><path d="m18.2 18.2-1.5-1.5"></path><path d="m7.3 7.3-1.5-1.5"></path><circle cx="12" cy="12" r="7.1"></circle></svg>`,
+        },
+    ],
+    [
+        "↔",
+        {
+            label: "Gegenargument",
+            svg: `<svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13"></path><path d="m14 4 4 4-4 4"></path><path d="M20 16H7"></path><path d="m10 12-4 4 4 4"></path></svg>`,
+        },
+    ],
+    [
+        "✓",
+        {
+            label: "Handlungsvorschlag",
+            svg: `<svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"></path></svg>`,
+        },
+    ],
+    [
+        "?",
+        {
+            label: "Prüffrage",
+            svg: `<svg class="section-heading-icon" viewBox="0 0 28 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 10.6a3.6 3.6 0 1 1 5.7 3c-1.1.8-2.1 1.6-2.1 3"></path><path d="M14 20.6h.01"></path><circle cx="14" cy="14" r="11"></circle></svg>`,
+        },
+    ],
+    [
+        "!",
+        {
+            label: "Signal",
+            svg: `<svg class="section-heading-icon" viewBox="0 0 28 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8.5v7"></path><path d="M14 20.2h.01"></path><circle cx="14" cy="14" r="11"></circle></svg>`,
+        },
+    ],
+]);
+
+function renderHeading(level, text) {
+    const markerMatch = text.match(/^(\S)\s+(.+)$/);
+
+    if (level === 2 && markerMatch) {
+        const [, marker, label] = markerMatch;
+        const config = headingIconMap.get(marker);
+
+        if (config) {
+            return `<h2 class="section-heading"><span class="section-heading-mark">${config.svg}</span><span class="section-heading-label">${renderInline(label)}</span></h2>`;
+        }
+    }
+
+    return `<h${level}>${renderInline(text)}</h${level}>`;
+}
+
 function parseScalar(rawValue) {
     const value = rawValue.trim();
     if (!value) {
@@ -256,7 +323,7 @@ function renderMarkdown(markdown) {
             flushParagraph();
             flushList();
             const level = Math.min(headingMatch[1].length, 3);
-            html.push(`<h${level}>${renderInline(headingMatch[2])}</h${level}>`);
+            html.push(renderHeading(level, headingMatch[2]));
             continue;
         }
 

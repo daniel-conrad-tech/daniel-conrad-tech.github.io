@@ -39,6 +39,13 @@ This repository is a public GitHub Pages site for Daniel Conrad.
 - Keep the site compatible with static hosting.
 - Build steps are acceptable when they clearly improve consistency and maintainability.
 - Make sure links, assets, and paths work from the repository root.
+- After changes to page content, generated text pages, or styling, rebuild the site before considering the work done.
+- Use the local HTTP preview for verification instead of `file://` because the site uses root-based asset paths.
+- For local verification, prefer `npm run preview:full`. It should rebuild the site and start the local server for LAN access.
+- Restart the local preview server only when it is not already running or when the preview setup itself has changed. For ordinary HTML, CSS, and generated page changes, rebuilding and reloading the browser is sufficient.
+- `npm run preview` should start the local server with LAN access enabled.
+- When starting local preview, detect the active local IP address and report the full reachable URL explicitly.
+- After rebuilding and starting local preview, always print the exact reachable LAN URL so the user can open the site immediately on other devices.
 
 ## Style Direction
 

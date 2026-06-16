@@ -5,7 +5,7 @@
     "build:css": "tailwindcss -i ./assets/css/tailwind.css -o ./assets/css/style.css --minify",
     "build:texts": "node ./scripts/build-texts.js",
     "dev:css": "tailwindcss -i ./assets/css/tailwind.css -o ./assets/css/style.css --watch",
-    "preview": "python3 -m http.server 4173",
+    "preview": "python3 -m http.server 4173 --bind 0.0.0.0",
     "preview:full": "npm run build && npm run preview",
     "publish:text": "node ./scripts/publish-text.js"
   },
