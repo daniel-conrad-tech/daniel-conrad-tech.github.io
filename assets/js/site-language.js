@@ -23,7 +23,8 @@ const translations = {
             "Gedanken zu Softwarearchitektur, KI, Wirkung und kognitiver Last.",
         texts_title: "Texte",
         texts_copy:
-            "Hier entstehen später Notizen, Essays und technische Analysen.",
+            "Notizen, Essays und Analysen zu KI, Software und systemischem Denken.",
+        texts_archive_cta: "Alle Texte ansehen",
         contact_title: "Kontakt",
         contact_label: "Kontakt:",
         footer_imprint: "Impressum",
@@ -104,7 +105,8 @@ const translations = {
             "Notes on software architecture, AI, impact, and cognitive load.",
         texts_title: "Writing",
         texts_copy:
-            "This is where notes, essays, and technical analyses will appear over time.",
+            "Notes, essays, and analyses on AI, software, and systems thinking.",
+        texts_archive_cta: "View all writing",
         contact_title: "Contact",
         contact_label: "Contact:",
         footer_imprint: "Legal notice",

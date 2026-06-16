@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @source "../../*.html";
+@source "../../texte/**/*.html";
 @source "../../assets/js/*.js";
 
 @theme {
@@ -222,5 +223,166 @@
     .legal-list {
         @apply mt-4 space-y-3 pl-5 text-[1rem] leading-7 text-muted;
         list-style: disc;
+    }
+
+    .section-actions {
+        @apply mt-6;
+    }
+
+    .article-home-grid {
+        @apply mt-8 grid gap-4 md:grid-cols-3;
+    }
+
+    .article-home-card {
+        @apply rounded-3xl border border-line bg-panel p-6;
+    }
+
+    .article-home-meta {
+        @apply text-sm text-muted;
+    }
+
+    .article-home-title {
+        @apply mt-3 text-xl font-semibold tracking-tight;
+    }
+
+    .article-home-link {
+        @apply transition hover:text-accent;
+    }
+
+    .article-home-summary {
+        @apply mt-3 text-[1rem] leading-7 text-muted;
+    }
+
+    .archive-page {
+        @apply mx-auto max-w-[1080px] px-5 pb-20 pt-8 sm:pb-24 sm:pt-12;
+    }
+
+    .archive-hero {
+        @apply max-w-3xl py-8 sm:py-12;
+    }
+
+    .archive-kicker {
+        @apply text-xs font-semibold uppercase tracking-[0.22em] text-accent sm:text-sm;
+    }
+
+    .archive-title {
+        @apply mt-3 text-[2.4rem] leading-[1.02] font-semibold tracking-tight sm:text-5xl;
+    }
+
+    .archive-summary {
+        @apply mt-5 max-w-2xl text-[1.05rem] leading-8 text-muted sm:text-xl;
+    }
+
+    .archive-list {
+        @apply border-t border-line py-12;
+    }
+
+    .article-list-card {
+        @apply border-b border-line py-8;
+    }
+
+    .article-list-meta {
+        @apply text-sm text-muted;
+    }
+
+    .article-list-title {
+        @apply mt-3 text-2xl font-semibold tracking-tight sm:text-3xl;
+    }
+
+    .article-list-link {
+        @apply transition hover:text-accent;
+    }
+
+    .article-list-summary {
+        @apply mt-4 max-w-2xl text-[1rem] leading-7 text-muted;
+    }
+
+    .article-page {
+        @apply mx-auto max-w-3xl px-5 pb-20 pt-8 sm:pb-24 sm:pt-12;
+    }
+
+    .article-topbar {
+        @apply flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between;
+    }
+
+    .article-breadcrumb {
+        @apply flex flex-wrap items-center gap-2 text-sm text-muted;
+    }
+
+    .article-breadcrumb-separator {
+        @apply text-line;
+    }
+
+    .article-header {
+        @apply mt-6 border-b border-line pb-10;
+    }
+
+    .article-kicker {
+        @apply text-xs font-semibold uppercase tracking-[0.22em] text-accent sm:text-sm;
+    }
+
+    .article-title {
+        @apply mt-3 text-[2.5rem] leading-[1.02] font-semibold tracking-tight text-balance sm:text-6xl;
+    }
+
+    .article-summary {
+        @apply mt-5 max-w-2xl text-[1.05rem] leading-8 text-muted sm:text-xl;
+    }
+
+    .article-meta {
+        @apply mt-6 text-sm text-muted;
+    }
+
+    .article-tags {
+        @apply mt-4 flex flex-wrap gap-2;
+    }
+
+    .article-tag {
+        @apply rounded-full border border-line bg-panel px-3 py-1 text-xs font-medium text-muted;
+    }
+
+    .article-actions {
+        @apply flex items-center gap-2 self-start sm:self-auto;
+    }
+
+    .article-action-icon {
+        @apply inline-flex h-10 w-10 items-center justify-center rounded-full border border-line/80 bg-panel/45 text-muted transition hover:border-accent/40 hover:bg-panel/70 hover:text-accent;
+    }
+
+    .article-action-svg {
+        @apply h-4 w-4;
+    }
+
+    .article-action-status {
+        @apply min-h-6 pl-2 text-sm text-muted;
+    }
+
+    .article-content {
+        @apply py-10;
+    }
+
+    .article-content h1 {
+        @apply mt-10 text-3xl font-semibold tracking-tight sm:text-4xl;
+    }
+
+    .article-content h2 {
+        @apply mt-10 text-2xl font-semibold tracking-tight sm:text-3xl;
+    }
+
+    .article-content h3 {
+        @apply mt-8 text-xl font-semibold tracking-tight sm:text-2xl;
+    }
+
+    .article-content p {
+        @apply mt-5 text-[1.02rem] leading-8 text-ink/92;
+    }
+
+    .article-content ul {
+        @apply mt-5 space-y-3 pl-5 text-[1rem] leading-7 text-muted;
+        list-style: disc;
+    }
+
+    .article-content code {
+        @apply rounded bg-panel px-1.5 py-0.5 text-[0.95em] text-accent;
     }
 }

@@ -1,8 +1,13 @@
 {
   "private": true,
   "scripts": {
+    "build": "npm run build:texts && npm run build:css",
     "build:css": "tailwindcss -i ./assets/css/tailwind.css -o ./assets/css/style.css --minify",
-    "dev:css": "tailwindcss -i ./assets/css/tailwind.css -o ./assets/css/style.css --watch"
+    "build:texts": "node ./scripts/build-texts.js",
+    "dev:css": "tailwindcss -i ./assets/css/tailwind.css -o ./assets/css/style.css --watch",
+    "preview": "python3 -m http.server 4173",
+    "preview:full": "npm run build && npm run preview",
+    "publish:text": "node ./scripts/publish-text.js"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.0",
