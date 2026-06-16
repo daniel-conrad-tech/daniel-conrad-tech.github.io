@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# Editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs and runtime files
+*.log
+*.pid
+
+# Dependencies
+node_modules/
+
+# Temporary files
+tmp/
+temp/
