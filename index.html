@@ -7,64 +7,131 @@
         <meta
             name="description"
             content="Softwareentwicklung, KI, ETHON und systemisches Denken."
+            data-i18n-meta-content="description"
         />
         <link rel="stylesheet" href="assets/css/style.css" />
+        <script src="assets/js/site-language.js" defer></script>
     </head>
     <body class="min-h-screen antialiased">
+        <div class="language-bar">
+            <div class="language-bar-inner">
+                <div class="language-controls" aria-label="Sprachauswahl">
+                    <button
+                        class="language-button"
+                        id="language-de"
+                        type="button"
+                        data-language-switch="de"
+                        data-active="true"
+                        title="Auf Deutsch anzeigen"
+                        aria-label="Zur deutschen Version wechseln"
+                    >
+                        <span class="language-flag" aria-hidden="true">🇩🇪</span>
+                        <span class="language-code">DE</span>
+                    </button>
+                    <button
+                        class="language-button"
+                        id="language-en"
+                        type="button"
+                        data-language-switch="en"
+                        data-active="false"
+                        title="Show English version"
+                        aria-label="Switch to the English version"
+                    >
+                        <span class="language-flag" aria-hidden="true">🇺🇸</span>
+                        <span class="language-code">EN</span>
+                    </button>
+                </div>
+                <p
+                    class="translation-note"
+                    id="translation-note"
+                    hidden
+                    data-i18n="translation_note"
+                >
+                    AI-assisted English may contain minor inaccuracies.
+                </p>
+            </div>
+        </div>
         <header class="site-header">
             <a class="logo-mark" href="/">Daniel Conrad</a>
             <nav class="site-nav">
-                <a class="nav-link" href="#projekte">Projekte</a>
-                <a class="nav-link" href="#texte">Texte</a>
-                <a class="nav-link" href="#kontakt">Kontakt</a>
+                <a class="nav-link" href="#projekte" data-i18n="nav_projects"
+                    >Projekte</a
+                >
+                <a class="nav-link" href="#texte" data-i18n="nav_texts"
+                    >Texte</a
+                >
+                <a class="nav-link" href="#kontakt" data-i18n="nav_contact"
+                    >Kontakt</a
+                >
             </nav>
         </header>
 
         <main class="page-main">
             <section class="hero-section">
-                <p class="eyebrow">Software · KI · Systemdenken</p>
-                <h1 class="display-title">
+                <p class="eyebrow" data-i18n="eyebrow">
+                    Software · KI · Systemdenken
+                </p>
+                <h1 class="display-title" data-i18n="hero_title">
                     Ich baue Werkzeuge, die Denken präziser machen.
                 </h1>
-                <p class="lead-copy">
+                <p class="lead-copy" data-i18n="hero_lead">
                     ETHON ist mein Versuch, Prinzipien, Axiome und KI zu einem
                     handlungsfähigen Denkwerkzeug zu verbinden.
                 </p>
                 <div class="action-row">
-                    <a class="button-primary" href="#projekte"
+                    <a
+                        class="button-primary"
+                        href="#projekte"
+                        data-i18n="hero_primary_cta"
                         >Projekte ansehen</a
                     >
-                    <a class="button-secondary" href="#kontakt">Kontakt</a>
+                    <a
+                        class="button-secondary"
+                        href="#kontakt"
+                        data-i18n="hero_secondary_cta"
+                        >Kontakt</a
+                    >
                 </div>
             </section>
 
             <section id="projekte" class="section-block">
                 <div class="section-header">
-                    <h2 class="section-title">Projekte</h2>
-                    <p class="section-copy section-copy--wide">
+                    <h2 class="section-title" data-i18n="projects_title">
+                        Projekte
+                    </h2>
+                    <p
+                        class="section-copy section-copy--wide"
+                        data-i18n="projects_intro"
+                    >
                         Werkzeuge, Denkmodelle und Systeme, die Klarheit,
                         Entscheidungskraft und bessere technische Arbeit
-                        unterstuetzen.
+                        unterstützen.
                     </p>
                 </div>
                 <div class="card-grid">
                     <article class="surface-card">
                         <h3 class="card-title">ETHON</h3>
-                        <p class="card-copy">
+                        <p class="card-copy" data-i18n="project_ethon_copy">
                             Ein Denk- und Prüfsystem für präzisere
                             Entscheidungen mit KI.
                         </p>
                     </article>
                     <article class="surface-card">
                         <h3 class="card-title">Review-Agent</h3>
-                        <p class="card-copy">
+                        <p
+                            class="card-copy"
+                            data-i18n="project_review_agent_copy"
+                        >
                             Werkzeuge für bessere Code Reviews, Mustererkennung
                             und Kontextführung.
                         </p>
                     </article>
                     <article class="surface-card">
                         <h3 class="card-title">Systemnotizen</h3>
-                        <p class="card-copy">
+                        <p
+                            class="card-copy"
+                            data-i18n="project_system_notes_copy"
+                        >
                             Gedanken zu Softwarearchitektur, KI, Wirkung und
                             kognitiver Last.
                         </p>
@@ -73,17 +140,19 @@
             </section>
 
             <section id="texte" class="section-block section-block--narrow">
-                <h2 class="section-title">Texte</h2>
-                <p class="section-copy">
-                    Hier entstehen spaeter Notizen, Essays und technische
+                <h2 class="section-title" data-i18n="texts_title">Texte</h2>
+                <p class="section-copy" data-i18n="texts_copy">
+                    Hier entstehen später Notizen, Essays und technische
                     Analysen.
                 </p>
             </section>
 
             <section id="kontakt" class="section-block section-block--narrow">
-                <h2 class="section-title">Kontakt</h2>
+                <h2 class="section-title" data-i18n="contact_title">
+                    Kontakt
+                </h2>
                 <p class="section-copy">
-                    Kontakt:
+                    <span data-i18n="contact_label">Kontakt:</span>
                     <a class="inline-link" href="mailto:contact@daniel-conrad.tech"
                         >contact@daniel-conrad.tech</a
                     >

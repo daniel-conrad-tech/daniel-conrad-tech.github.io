@@ -24,6 +24,7 @@ This repository is a public GitHub Pages site for Daniel Conrad.
 - Prefer Tailwind defaults and utilities before introducing custom styling layers.
 - Avoid unnecessary JavaScript unless the feature really needs it.
 - Keep content direct, intentional, and professional.
+- Prefer correct German spelling with umlauts in user-facing copy and documentation when the file format supports it.
 - Treat mobile as a first-class reading experience, not as a reduced desktop layout.
 
 ## Public Repo Notes
@@ -31,6 +32,7 @@ This repository is a public GitHub Pages site for Daniel Conrad.
 - Everything committed here is public.
 - Do not add secrets, private notes, or internal-only prompts.
 - If a file is meant to demonstrate process or thinking, it should be written clearly enough for public readers.
+- Never commit private SSH keys, tokens, passwords, or any other live credentials.
 
 ## GitHub Pages
 

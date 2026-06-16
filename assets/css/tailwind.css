@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @source "../../*.html";
+@source "../../assets/js/*.js";
 
 @theme {
     --color-night: #0f1117;
@@ -46,6 +47,38 @@
 }
 
 @layer components {
+    .language-bar {
+        @apply border-b border-line/60 bg-night/70;
+    }
+
+    .language-bar-inner {
+        @apply mx-auto flex max-w-[1080px] flex-col gap-3 px-5 py-3 sm:flex-row sm:items-start sm:justify-between;
+    }
+
+    .language-controls {
+        @apply flex items-center gap-2 self-start rounded-full bg-panel/50 p-1;
+    }
+
+    .language-button {
+        @apply inline-flex min-h-10 items-center gap-2 rounded-full px-3 py-2 text-sm font-medium text-muted transition duration-200 hover:text-ink;
+    }
+
+    .language-button[data-active="true"] {
+        @apply bg-accent/14 text-ink shadow-[inset_0_0_0_1px_rgb(125_211_252_/_0.34)];
+    }
+
+    .language-flag {
+        @apply text-base leading-none sm:text-lg;
+    }
+
+    .language-code {
+        @apply text-[0.65rem] font-semibold uppercase tracking-[0.22em];
+    }
+
+    .translation-note {
+        @apply max-w-2xl text-[0.82rem] leading-6 text-muted sm:pt-2;
+    }
+
     .site-header {
         @apply mx-auto flex max-w-[1080px] flex-col gap-4 px-5 py-5 sm:flex-row sm:items-center sm:justify-between;
     }
