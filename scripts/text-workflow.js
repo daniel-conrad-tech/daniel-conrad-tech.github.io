@@ -42,6 +42,67 @@ function renderInline(text) {
     );
 }
 
+const codeExampleLabelMap = new Map([
+    ["js", "JavaScript"],
+    ["javascript", "JavaScript"],
+    ["ts", "TypeScript"],
+    ["tsx", "TSX"],
+    ["jsx", "JSX"],
+    ["html", "HTML"],
+    ["css", "CSS"],
+    ["json", "JSON"],
+    ["bash", "Shell"],
+    ["sh", "Shell"],
+    ["shell", "Shell"],
+    ["md", "Markdown"],
+    ["markdown", "Markdown"],
+    ["yaml", "YAML"],
+    ["yml", "YAML"],
+    ["txt", "Text"],
+    ["text", "Text"],
+]);
+
+function parseCodeFenceInfo(infoString) {
+    const info = infoString.trim();
+    const attributes = {};
+    const attributePattern = /([a-zA-Z0-9_-]+)="([^"]*)"/g;
+    let cleanedInfo = info;
+
+    cleanedInfo = cleanedInfo.replace(attributePattern, (_, key, value) => {
+        attributes[key] = value;
+        return "";
+    });
+
+    const language = cleanedInfo.trim().split(/\s+/)[0] || "";
+    const normalizedLanguage = language.toLowerCase();
+    const defaultLabel =
+        attributes.label ||
+        codeExampleLabelMap.get(normalizedLanguage) ||
+        (language ? language.toUpperCase() : "Code");
+
+    return {
+        language,
+        label: defaultLabel,
+        note: attributes.note || "",
+        open: attributes.open !== "false",
+    };
+}
+
+function renderCodeExample(code, options = {}) {
+    const attributes = [
+        `class="code-panel"`,
+        `data-code-example="true"`,
+        `data-code-open="${options.open === false ? "false" : "true"}"`,
+        `data-code-label="${escapeHtml(options.label || "Code")}"`,
+    ];
+
+    if (options.note) {
+        attributes.push(`data-code-note="${escapeHtml(options.note)}"`);
+    }
+
+    return `<pre ${attributes.join(" ")}><code>${escapeHtml(code)}</code></pre>`;
+}
+
 const headingIconMap = new Map([
     [
         "△",
@@ -288,6 +349,8 @@ function renderMarkdown(markdown) {
     const html = [];
     let paragraphBuffer = [];
     let listBuffer = [];
+    let codeFenceInfo = null;
+    let codeFenceBuffer = [];
 
     function flushParagraph() {
         if (paragraphBuffer.length === 0) {
@@ -310,11 +373,34 @@ function renderMarkdown(markdown) {
     }
 
     for (const line of lines) {
+        if (codeFenceInfo) {
+            if (line.trim().startsWith("```")) {
+                html.push(
+                    renderCodeExample(codeFenceBuffer.join("\n"), codeFenceInfo),
+                );
+                codeFenceInfo = null;
+                codeFenceBuffer = [];
+                continue;
+            }
+
+            codeFenceBuffer.push(line);
+            continue;
+        }
+
         const trimmed = line.trim();
 
         if (!trimmed) {
             flushParagraph();
             flushList();
+            continue;
+        }
+
+        const codeFenceStart = line.match(/^```(.*)$/);
+        if (codeFenceStart) {
+            flushParagraph();
+            flushList();
+            codeFenceInfo = parseCodeFenceInfo(codeFenceStart[1]);
+            codeFenceBuffer = [];
             continue;
         }
 
@@ -340,6 +426,10 @@ function renderMarkdown(markdown) {
 
     flushParagraph();
     flushList();
+
+    if (codeFenceInfo) {
+        html.push(renderCodeExample(codeFenceBuffer.join("\n"), codeFenceInfo));
+    }
 
     return html.join("\n");
 }
@@ -480,6 +570,7 @@ function renderArticlePage(article) {
                 </div>
             </article>
         </main>
+        <script src="/assets/js/code-showcase.js" defer></script>
         <script src="/assets/js/article-actions.js" defer></script>`,
     });
 }

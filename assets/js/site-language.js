@@ -199,6 +199,31 @@ function updateText(language) {
             element.setAttribute("content", translation);
         }
     });
+
+    document.querySelectorAll("[data-i18n-html]").forEach((element) => {
+        const key = element.dataset.i18nHtml;
+        const translation = translations[language][key];
+
+        if (translation) {
+            element.innerHTML = translation;
+        }
+    });
+
+    document.querySelectorAll("[data-i18n-attr]").forEach((element) => {
+        const mappings = element.dataset.i18nAttr
+            .split(";")
+            .map((entry) => entry.trim())
+            .filter(Boolean);
+
+        mappings.forEach((mapping) => {
+            const [attribute, key] = mapping.split(":").map((part) => part.trim());
+            const translation = translations[language][key];
+
+            if (attribute && translation) {
+                element.setAttribute(attribute, translation);
+            }
+        });
+    });
 }
 
 function updateSwitchLabels(language) {
@@ -227,6 +252,11 @@ function applyLanguage(language) {
     updateTranslationNote(language);
     document.documentElement.lang = language;
     window.localStorage.setItem(languageStorageKey, language);
+    document.dispatchEvent(
+        new CustomEvent("site-language-changed", {
+            detail: { language },
+        }),
+    );
 }
 
 document.addEventListener("DOMContentLoaded", () => {

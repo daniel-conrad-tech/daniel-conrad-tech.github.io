@@ -14,6 +14,7 @@ This repository is a public GitHub Pages site for Daniel Conrad.
 - `index.html` is the main page.
 - `assets/css/tailwind.css` is the Tailwind source file.
 - `assets/css/style.css` is the generated stylesheet served by GitHub Pages.
+- `assets/js/code-showcase.js` enhances shared code examples into the site's reusable code UI.
 - Keep additional assets organized under `assets/`.
 
 ## Editing Guidelines
@@ -26,6 +27,9 @@ This repository is a public GitHub Pages site for Daniel Conrad.
 - Keep content direct, intentional, and professional.
 - Prefer correct German spelling with umlauts in user-facing copy and documentation when the file format supports it.
 - Treat mobile as a first-class reading experience, not as a reduced desktop layout.
+- Follow `docs/ui-guidelines.md` for button behavior, icon controls, tooltips, and code example presentation.
+- Do not hand-build one-off code showcase markup when the shared code example pattern can be used instead.
+- For article content, prefer normal Markdown code fences and let the publishing pipeline render reusable code examples.
 
 ## Public Repo Notes
 
@@ -53,6 +57,7 @@ This repository is a public GitHub Pages site for Daniel Conrad.
 - Typography, spacing, and contrast matter more than visual clutter.
 - Prefer simple, strong section structure over decorative noise.
 - Favor pragmatic constraints over unlimited flexibility when that leads to faster, clearer decisions.
+- Prefer shared UI patterns over local visual exceptions, especially for buttons, utility controls, and code blocks.
 
 ## Mobile Principles
 

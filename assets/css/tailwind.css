@@ -168,6 +168,101 @@
         @apply mt-3 text-[1rem] leading-7 text-muted;
     }
 
+    .code-showcase {
+        @apply mt-8 overflow-hidden rounded-3xl border border-line bg-panel;
+    }
+
+    .code-showcase-header {
+        @apply flex flex-col gap-2 border-b border-line/80 px-5 py-4 sm:flex-row sm:items-center sm:justify-between;
+    }
+
+    .code-showcase-meta {
+        @apply min-w-0;
+    }
+
+    .code-showcase-title {
+        @apply text-sm font-semibold uppercase tracking-[0.2em] text-ink/88;
+    }
+
+    .code-showcase-note {
+        @apply text-sm text-muted;
+    }
+
+    .code-showcase-actions {
+        @apply flex flex-wrap gap-2;
+    }
+
+    .code-showcase[data-code-open="false"] [data-copy-code] {
+        @apply hidden;
+    }
+
+    .code-showcase-button {
+        @apply relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-line/80 bg-panel/45 text-muted transition hover:border-accent/40 hover:bg-panel/70 hover:text-accent;
+    }
+
+    .code-showcase-icon {
+        @apply h-4 w-4;
+    }
+
+    .code-showcase-icon--check {
+        @apply hidden;
+    }
+
+    .code-showcase-button[data-copied="true"] .code-showcase-icon--copy {
+        @apply hidden;
+    }
+
+    .code-showcase-button[data-copied="true"] .code-showcase-icon--check {
+        @apply block;
+    }
+
+    .code-showcase-icon--toggle {
+        @apply transition;
+    }
+
+    .code-showcase-button[aria-expanded="true"] .code-showcase-icon--toggle {
+        transform: rotate(0deg);
+    }
+
+    .code-showcase-button[aria-expanded="false"] .code-showcase-icon--toggle {
+        transform: rotate(180deg);
+    }
+
+    .code-showcase-tooltip {
+        @apply pointer-events-none invisible absolute top-full left-1/2 z-10 mt-2 -translate-x-1/2 whitespace-nowrap rounded-full border border-line bg-night px-3 py-1.5 text-xs font-medium text-ink opacity-0 shadow-[0_10px_30px_rgb(0_0_0_/_0.28)] transition;
+    }
+
+    .code-showcase-button:hover .code-showcase-tooltip,
+    .code-showcase-button:focus-visible .code-showcase-tooltip {
+        @apply visible opacity-100;
+    }
+
+    .code-panel {
+        @apply overflow-x-auto px-5 py-5 text-[0.92rem] leading-7 text-ink sm:px-6 sm:py-6;
+    }
+
+    .code-panel[hidden] {
+        @apply hidden;
+    }
+
+    .code-panel code {
+        font-family:
+            "SFMono-Regular", "SF Mono", "JetBrains Mono", "Menlo", "Consolas",
+            "Liberation Mono", monospace;
+    }
+
+    .code-emphasis {
+        @apply font-semibold text-ink;
+    }
+
+    .code-muted {
+        @apply text-muted;
+    }
+
+    .code-value {
+        @apply text-accent;
+    }
+
     .inline-link {
         @apply font-medium text-ink underline decoration-line underline-offset-4 transition hover:decoration-accent hover:text-accent;
     }
