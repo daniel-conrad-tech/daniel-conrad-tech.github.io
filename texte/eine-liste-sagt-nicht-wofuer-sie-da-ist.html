@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Eine Liste sagt nicht, wofür sie da ist | Daniel Conrad</title>
+        <meta name="description" content="Eine Gästeliste kann mit einer Liste beginnen. Eine fachliche Abstraktion macht ihre Rolle und Regeln sichtbar und hält Aufrufer unabhängig von späteren Änderungen der internen Collection." />
+        <link rel="stylesheet" href="/assets/css/style.css" />
+        <link rel="canonical" href="https://daniel-conrad.tech/texte/eine-liste-sagt-nicht-wofuer-sie-da-ist.html" />
+    </head>
+    <body class="min-h-screen antialiased">
+        <header class="site-header">
+            <a class="logo-mark" href="/">Daniel Conrad</a>
+            <nav class="site-nav">
+                <a class="nav-link" href="/#projekte">Projekte</a>
+                <a class="nav-link" href="/texte/">Texte</a>
+                <a class="nav-link" href="/#kontakt">Kontakt</a>
+            </nav>
+        </header>
+
+        <main class="article-page">
+            <div class="article-topbar">
+                <div class="article-breadcrumb">
+                    <a class="inline-link" href="/texte/">Texte</a>
+                    <span class="article-breadcrumb-separator">/</span>
+                    <span>Eine Liste sagt nicht, wofür sie da ist</span>
+                </div>
+                <div class="article-actions">
+                    <button
+                        class="article-action-icon"
+                        type="button"
+                        data-copy-link
+                        data-copy-url="https://daniel-conrad.tech/texte/eine-liste-sagt-nicht-wofuer-sie-da-ist.html"
+                        title="Link kopieren"
+                        aria-label="Link kopieren"
+                    >
+                        <svg
+                            class="article-action-svg"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <rect x="9" y="9" width="10" height="10" rx="2"></rect>
+                            <path d="M5 15V7a2 2 0 0 1 2-2h8"></path>
+                        </svg>
+                    </button>
+                    <span class="article-action-status" data-copy-status aria-live="polite"></span>
+                </div>
+            </div>
+            <article>
+                <header class="article-header">
+                    <h1 class="article-title">Eine Liste sagt nicht, wofür sie da ist</h1>
+                    <p class="article-summary">Eine Gästeliste kann mit einer Liste beginnen. Eine fachliche Abstraktion macht ihre Rolle und Regeln sichtbar und hält Aufrufer unabhängig von späteren Änderungen der internen Collection.</p>
+                    <div class="article-meta">
+                        <time datetime="2026-10-15">15. Oktober 2026</time>
+                        <span class="ai-disclosure" tabindex="0" aria-label="In Zusammenarbeit mit KI erstellt; inhaltlich geprüft und redaktionell verantwortet von Daniel Conrad.">
+                            <span class="ai-disclosure-mark" aria-hidden="true">KI</span>
+                            <span class="ai-disclosure-tooltip" role="tooltip">In Zusammenarbeit mit KI erstellt; inhaltlich geprüft und redaktionell verantwortet von Daniel Conrad.</span>
+                        </span>
+                    </div>
+                    <ul class="article-tags"><li class="article-tag">Softwaredesign</li><li class="article-tag">Java</li><li class="article-tag">Abstraktion</li><li class="article-tag">Objektorientierung</li></ul>
+                </header>
+                <div class="article-content">
+                    <p>Das Java Collections Framework liefert allgemeine Abstraktionen. Eine <code>List</code> beschreibt eine geordnete Sammlung, die auch doppelte Elemente enthalten kann. <code>ArrayList</code> ist eine konkrete Implementierung davon. Beide kennen aber nicht die fachliche Rolle der Werte in einer Anwendung.</p>
+<p>Nehmen wir eine Gästeliste mit einer klaren Zusage: Jeder Gast darf höchstens einmal vorkommen. Eine <code>List&lt;GastId&gt;</code> kann die IDs speichern, setzt diese Regel aber nicht selbst durch. Die Gästeliste muss beim Einladen prüfen, ob die ID schon enthalten ist. Auch wenn die Liste diese Prüfung ermöglicht, sagt der Typ <code>List</code> nicht, was „einladen“ bedeutet oder welche Handlungen Aufrufer mit der Gästeliste ausführen dürfen.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5 19 18H5Z"></path></svg></span><span class="section-heading-label">Diagnose</span></h2>
+<p>Stell dir vor, du organisierst ein Abendessen. Der Anwendungscode speichert die Gäste direkt in einer <code>List&lt;GastId&gt;</code>. Damit kann dieselbe ID mehrfach in der Liste stehen. Um die Zusage „jeder Gast höchstens einmal“ einzuhalten, muss jeder Aufruf vor dem Hinzufügen prüfen, ob der Gast schon eingetragen ist.</p>
+<p>Die Liste bietet allgemeine Operationen. Was bedeutet <code>add</code> in diesem Anwendungsfall? Was soll bei einer zweiten Einladung passieren? Ist der Gast eingeladen, hat er zugesagt oder ist er nur vorgemerkt? Die Datenstruktur beantwortet diese Fragen nicht. Die Gästeliste ist mehr als die Collection, in der ihre Einträge liegen.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="4.5" width="6" height="6" rx="1.2"></rect><rect x="13.5" y="4.5" width="6" height="6" rx="1.2"></rect><rect x="4.5" y="13.5" width="6" height="6" rx="1.2"></rect><rect x="13.5" y="13.5" width="6" height="6" rx="1.2"></rect></svg></span><span class="section-heading-label">Muster</span></h2>
+<p>Eine Liste beschreibt technische Eigenschaften und mögliche Operationen. Sie sagt nicht, welche Rolle ihre Werte im Anwendungsfall spielen.</p>
+<p>Darum würde ich die Liste nicht durch die Anwendung reichen, sondern ein Objekt <code>Gästeliste</code> anbieten. Sein Name erklärt, wofür die Einträge stehen. Seine Operationen könnten <code>einladen</code>, <code>istEingeladen</code> und <code>ausladen</code> heißen.</p>
+<p>Der übrige Code arbeitet dann mit Einladungen statt mit allgemeinen Listenoperationen. Der Aufruf beschreibt den Anwendungsfall, nicht die Speichertechnik.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.1"></circle><path d="M12 3.8v2.1"></path><path d="M12 18.1v2.1"></path><path d="m18.2 5.8-1.5 1.5"></path><path d="m7.3 16.7-1.5 1.5"></path><path d="M20.2 12h-2.1"></path><path d="M5.9 12H3.8"></path><path d="m18.2 18.2-1.5-1.5"></path><path d="m7.3 7.3-1.5-1.5"></path><circle cx="12" cy="12" r="7.1"></circle></svg></span><span class="section-heading-label">Mechanik</span></h2>
+<p>Eine Gästeliste könnte beispielsweise diese Operationen anbieten:</p>
+<ul><li><code>einladen(gastId)</code>: den Gast auf die Gästeliste setzen.</li><li><code>istEingeladen(gastId)</code>: prüfen, ob der Gast auf der Liste steht.</li><li><code>ausladen(gastId)</code>: den Gast wieder von der Liste entfernen.</li></ul>
+<p>Innen verwendet die Gästeliste eine <code>ArrayList&lt;GastId&gt;</code>. Sie hält die Collection privat und prüft beim Einladen, ob der Gast schon eingetragen ist. Nach außen gilt: Ein Gast steht höchstens einmal auf der Liste. Eine erneute Einladung erzeugt keinen zweiten Eintrag. Wer ausgeladen wurde, gilt danach nicht mehr als eingeladen.</p>
+<p>Der Aufruf bleibt fachlich lesbar:</p>
+<pre class="code-panel" data-code-example="true" data-code-open="true" data-code-label="" data-code-language="java" data-code-note="Die Liste bleibt intern (Java)"><code><span class="code-muted">final</span> <span class="code-muted">class</span> Gästeliste {
+    <span class="code-muted">private</span> <span class="code-muted">final</span> List&lt;GastId&gt; gäste = <span class="code-muted">new</span> ArrayList&lt;&gt;();
+
+    <span class="code-muted">boolean</span> einladen(GastId gastId) {
+        <span class="code-muted">if</span> (gäste.contains(gastId)) {
+            <span class="code-muted">return</span> <span class="code-value">false</span>;
+        }
+        gäste.add(gastId);
+        <span class="code-muted">return</span> <span class="code-value">true</span>;
+    }
+}</code></pre>
+<p>Der Aufrufer sagt <code>gästeliste.einladen(gastId)</code>. Der Rückgabewert zeigt, ob die ID neu hinzugefügt wurde: <code>true</code> bei der ersten Einladung, <code>false</code>, wenn sie bereits auf der Liste steht. Der Aufrufer bekommt die Liste nicht selbst und kann sie nicht leeren, durchlaufen oder beliebig verändern.</p>
+<p>Das ist mehr als ein anderer Name für dieselbe Collection. Die Schnittstelle lässt weniger zu und erklärt mehr. Der Aufrufer muss nicht selbst auswählen, wie Listenoperationen die Gästelistenregel umsetzen sollen.</p>
+<p>Hier berührt der Gedanke das Interface Segregation Principle: Ein Aufrufer soll nur von den Operationen abhängen, die er braucht. Die Gästeliste verbirgt allgemeine Listenoperationen wie <code>clear</code>, <code>removeAll</code> oder einen Iterator, mit dem sich die gesamte Liste von außen verändern ließe. Wenn manche Aufrufer nur prüfen und andere Einladungen verwalten sollen, können dafür zusätzlich getrennte Lese- und Schreibschnittstellen sinnvoll sein.</p>
+<h3>Wenn sich die interne Struktur ändert</h3>
+<p>Die Gästeliste könnte zunächst mit ihrer internen Liste arbeiten und die Regel durch eine Prüfung vor jedem Hinzufügen sichern. Wenn die Liste später wächst, kann es sinnvoll sein, diese interne Struktur durch ein <code>Set&lt;GastId&gt;</code> zu ersetzen. Ein <code>Set</code> verhindert doppelte IDs anhand der Gleichheitsregeln von <code>GastId</code>; die fachliche Zusage und der Aufruf <code>gästeliste.einladen(gastId)</code> bleiben gleich.</p>
+<p>Weil Aufrufer nur den Vertrag der Gästeliste kennen, bleibt dieser Umbau in der Gästeliste. Ohne diese Grenze könnten Aufrufer selbst Listenoperationen verwenden oder die Regel an mehreren Stellen nachbauen. Dann müssten diese Stellen bei einer späteren Strukturänderung gefunden und geprüft werden.</p>
+<p>Die Abstraktion verspricht nicht, jede Änderung kostenlos zu machen. Sie bündelt aber die interne Struktur und die Regeln, die sie durchsetzt. Ändert sich auch der Vertrag – etwa weil nun eine bestimmte Reihenfolge garantiert werden soll –, müssen die Aufrufer diese neue Zusage berücksichtigen.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3.5 2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5 2.5-6Z"></path><path d="m19 3 .7 1.8L21.5 5.5l-1.8.7L19 8l-.7-1.8-1.8-.7 1.8-.7L19 3Z"></path></svg></span><span class="section-heading-label">Was das mit KI zu tun hat</span></h2>
+<p>Selbst wenn ein KI-Agent ganze Programme erzeugen oder umfangreich umbauen kann, bleibt eine andere Frage: Wie kann er eine Änderung zuverlässig begrenzen und prüfen? Fähigkeit, viel Code zu erzeugen, macht die Beziehungen zwischen den Teilen nicht einfacher.</p>
+<p>Wenn Anwendungscode direkt mit Listen arbeitet, muss ein Agent erkennen, welche Stellen die Gästelistenregel umsetzen und welche Listenoperationen davon abhängen. Eine <code>Gästeliste</code> gibt ihm einen kleineren, benannten Auftrag: <code>einladen</code>, <code>istEingeladen</code>, <code>ausladen</code>.</p>
+<p>Das kann die kognitive Last eines Agenten reduzieren: Für eine Änderung muss er weniger mögliche Operationen und verstreute Regeln gleichzeitig berücksichtigen. Wird die interne Liste später durch eine andere Collection ersetzt, kann die Anpassung in der Gästeliste liegen. Der Agent muss dann nicht zuerst alle Aufrufer finden, die von der konkreten Collection abhängen. Menschen profitieren davon aus demselben Grund.</p>
+<p>Das ist meine Entwurfsbegründung aus der Arbeit mit einem konkreten Codebestand, kein empirischer Nachweis darüber, wie jedes Modell intern denkt. Die praktische Frage bleibt überprüfbar: Muss ein Agent für eine lokale Änderung viele Aufrufstellen und Listenoperationen gleichzeitig rekonstruieren, oder reicht ihm der Vertrag der Gästeliste?</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13"></path><path d="m14 4 4 4-4 4"></path><path d="M20 16H7"></path><path d="m10 12-4 4 4 4"></path></svg></span><span class="section-heading-label">Gegenargument</span></h2>
+<p>Man kann aus jeder Variable eine Klasse machen. Das wäre keine Verbesserung. Wenn <code>Gästeliste</code> nur <code>add</code>, <code>contains</code>, <code>remove</code>, <code>clear</code> und alle weiteren Listenoperationen unverändert weiterreicht, hat sie die allgemeine Schnittstelle lediglich hinter einer zusätzlichen Datei versteckt.</p>
+<p>Auch eine lokale Liste kann passend sein, wenn sie nur eine einfache Zwischenrechnung ausdrückt. Meine These richtet sich an Anwendungscode, in dem eine Liste eine konkrete fachliche Rolle übernimmt: Dort sollte ihre Bedeutung nicht unsichtbar bleiben.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"></path></svg></span><span class="section-heading-label">Handlungsvorschlag</span></h2>
+<p>Wenn im Anwendungscode eine allgemeine Liste auftaucht, frage ich zuerst, wofür ihre Werte in diesem Ablauf stehen und welche Regel gelten soll. Wenn die Sammlung eine fachliche Rolle hat oder eine Regel durchsetzen muss, sollte ich erwägen, diese Rolle durch eine passende Schnittstelle auszudrücken.</p>
+<p>Diese Schnittstelle sollte nur die erlaubten Handlungen anbieten und ihre Zusagen klar machen. Die interne Collection kann sich später ändern, solange die Gästeliste ihren Vertrag weiterhin erfüllt.</p>
+<h3>Prompt für einen Agenten</h3>
+<p>Für eine konkrete Codebasis kann dieser Prompt als Ausgangspunkt dienen:</p>
+<pre class="code-panel" data-code-example="true" data-code-open="true" data-code-label="" data-code-language="text" data-code-note="Listen in einer Codebasis prüfen"><code>Untersuche in diesem Codebereich die Verwendung allgemeiner Listen und anderer Collections.
+
+Finde Stellen, an denen eine Liste eine fachliche Rolle oder konkrete Regeln ausdrückt. Prüfe dazu ihre Aufrufer und die tatsächlich benötigten Operationen. Schlage eine benannte, engere Abstraktion nur dann vor, wenn sie Bedeutung, Regeln oder erlaubte Handlungen klarer ausdrückt. Erzeuge keine Klasse, die lediglich die Listenmethoden unverändert weiterreicht.
+
+Nenne für jeden Vorschlag:
+- die betroffenen Stellen und die dort sichtbare fachliche Bedeutung,
+- den Vertrag und die Regeln, die eine Abstraktion sichern würde,
+- welche Komplexität dadurch entfällt und welche neue Komplexität entsteht,
+- wie sich die interne Collection später ändern ließe, ohne den Vertrag zu verletzen.
+
+Belege deine Einschätzung am vorhandenen Code. Wenn eine lokale Liste die klarste Lösung ist, sage das ebenfalls. Ändere noch keinen Code; liefere zuerst eine knappe Analyse und einen konkreten Vorschlag.</code></pre>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 28 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 10.6a3.6 3.6 0 1 1 5.7 3c-1.1.8-2.1 1.6-2.1 3"></path><path d="M14 20.6h.01"></path><circle cx="14" cy="14" r="11"></circle></svg></span><span class="section-heading-label">Prüffrage</span></h2>
+<p>Kann die interne Liste später geändert werden, ohne die Aufrufer anzupassen und ohne die Zusagen der Gästeliste zu verletzen?</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 28 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8.5v7"></path><path d="M14 20.2h.01"></path><circle cx="14" cy="14" r="11"></circle></svg></span><span class="section-heading-label">Signal</span></h2>
+<p>Ein gutes Zeichen ist, wenn der Anwendungscode <code>gästeliste.einladen(gastId)</code> aufruft und eine spätere Änderung der internen Collection keine Anpassung dieser Aufrufer erfordert.</p>
+<p>Ein Warnzeichen ist eine Hülle, die alle Listenmethoden weiterreicht und dem Aufrufer trotzdem dieselben Entscheidungen über die Speicherung und die Gästelistenregeln überlässt.</p>
+                </div>
+            </article>
+        </main>
+        <script src="/assets/js/code-showcase.js" defer></script>
+        <script src="/assets/js/article-actions.js" defer></script>
+
+        <footer class="site-footer">
+            <div class="footer-row">
+                <p>© 2026 Daniel Conrad</p>
+                <nav class="footer-links">
+                    <a class="footer-link" href="/impressum.html">Impressum</a>
+                    <a class="footer-link" href="/datenschutz.html">Datenschutz</a>
+                </nav>
+            </div>
+        </footer>
+    </body>
+</html>
