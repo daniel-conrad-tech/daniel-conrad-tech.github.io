@@ -38,10 +38,18 @@ function escapeHtml(value) {
 }
 
 function renderInline(text) {
-    return escapeHtml(text).replace(
-        /`([^`]+)`/g,
-        (_, code) => `<code>${escapeHtml(code)}</code>`,
-    );
+    const escaped = escapeHtml(text);
+    const segments = escaped.split(/(`[^`]+`|\*\*[^*]+\*\*)/g);
+
+    return segments.map((segment) => {
+        if (segment.startsWith("`") && segment.endsWith("`")) {
+            return `<code>${segment.slice(1, -1)}</code>`;
+        }
+        if (segment.startsWith("**") && segment.endsWith("**")) {
+            return `<strong>${segment.slice(2, -2)}</strong>`;
+        }
+        return segment;
+    }).join("");
 }
 
 const codeExampleLabelMap = new Map([
