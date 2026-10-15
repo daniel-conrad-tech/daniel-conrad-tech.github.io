@@ -2,6 +2,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const { renderHighlightedCode } = require("./code-highlighter");
 
 const repoRoot = path.resolve(__dirname, "..");
 const draftsDir = path.join(repoRoot, "drafts");
@@ -97,11 +98,18 @@ function renderCodeExample(code, options = {}) {
         `data-code-label="${escapeHtml(options.label || "Code")}"`,
     ];
 
+    if (options.language) {
+        attributes.push(
+            `data-code-language="${escapeHtml(options.language.toLowerCase())}"`,
+        );
+    }
+
     if (options.note) {
         attributes.push(`data-code-note="${escapeHtml(options.note)}"`);
     }
 
-    return `<pre ${attributes.join(" ")}><code>${escapeHtml(code)}</code></pre>`;
+    const renderedCode = renderHighlightedCode(code, options.language);
+    return `<pre ${attributes.join(" ")}><code>${renderedCode}</code></pre>`;
 }
 
 const headingIconMap = new Map([
@@ -143,7 +151,7 @@ const headingIconMap = new Map([
     [
         "?",
         {
-            label: "Prueffrage",
+            label: "Prüffrage",
             svg: `<svg class="section-heading-icon" viewBox="0 0 28 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 10.6a3.6 3.6 0 1 1 5.7 3c-1.1.8-2.1 1.6-2.1 3"></path><path d="M14 20.6h.01"></path><circle cx="14" cy="14" r="11"></circle></svg>`,
         },
     ],
@@ -313,7 +321,7 @@ function validateForPublish(draft) {
             patterns: ["## ✓ Handlungsvorschlag"],
         },
         {
-            label: "Prueffrage",
+            label: "Prüffrage",
             patterns: ["## ? Prueffrage", "## ? Prüffrage"],
         },
         {

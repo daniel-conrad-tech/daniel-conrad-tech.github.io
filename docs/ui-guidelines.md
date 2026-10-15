@@ -188,3 +188,14 @@ Kurz prüfen:
 5. Passt es zur zurückhaltenden, absichtsvollen Gesamtwirkung?
 
 Wenn zwei Lösungen ähnlich gut sind, die einfachere und ruhigere bevorzugen.
+
+### Shell-Hervorhebung im Build
+
+Shell-Codefences (`bash`, `sh`, `shell`, `zsh`) werden beim Text-Build mit den
+bestehenden Rollen `code-muted`, `code-value` und `code-emphasis` ausgezeichnet.
+Der Browser ergänzt nur die Kopier- und Aufklappbedienung; er analysiert den
+Code nicht erneut. Die Hervorhebung ist eine einfache lexikalische Lesehilfe,
+kein vollständiger Shell-Parser. Insbesondere werden Here-Documents und
+Variablen innerhalb von Zeichenketten nicht gesondert analysiert. Der sichtbare
+und kopierte Quelltext bleibt unverändert; unbekannte Sprachen bleiben reiner,
+HTML-escapter Text.

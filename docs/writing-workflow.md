@@ -44,13 +44,13 @@ Nicht jeder Text muss alle Sektionen gleich lang behandeln. Die Schlusssektionen
 - `draft`
   Rohtext, Notiz oder unfertige Fassung.
 - `ready-for-ai-review`
-  Formal vorbereitet und bereit fuer KI-Pruefung.
+  Formal vorbereitet und bereit für KI-Prüfung.
 - `ai-approved`
-  Gegen die Checkliste geprueft und von KI freigegeben.
+  Gegen die Checkliste geprüft und von KI freigegeben.
 - `author-approved`
-  Von Daniel bewusst fuer die oeffentliche Veroeffentlichung freigegeben.
+  Von Daniel bewusst für die öffentliche Veröffentlichung freigegeben.
 - `published`
-  Tatsaechlich live auf der Website.
+  Tatsächlich live auf der Website.
 
 ## Freigaberegeln
 
@@ -58,10 +58,10 @@ Nicht jeder Text muss alle Sektionen gleich lang behandeln. Die Schlusssektionen
 
 Ein Text darf `draft` sein, wenn:
 
-- Titel oder Struktur noch vorlaeufig sind
+- Titel oder Struktur noch vorläufig sind
 - Platzhalter noch enthalten sind
 - einzelne Pflichtsektionen noch fehlen
-- der Text noch nicht oeffentlich tragfaehig ist
+- der Text noch nicht öffentlich tragfähig ist
 
 ### 2. Ready for AI Review
 
@@ -70,7 +70,7 @@ Ein Text darf `ready-for-ai-review` sein, wenn:
 - alle Frontmatter-Pflichtfelder vorhanden sind
 - die Kernaussage benannt werden kann
 - die Zielrichtung des Textes klar ist
-- der Text keine bloesse Stichwortsammlung mehr ist
+- der Text keine bloße Stichwortsammlung mehr ist
 
 ### 3. AI Approved
 
@@ -80,7 +80,7 @@ Ein Text darf `ai-approved` sein, wenn:
 - `Muster` und `Mechanik` klar unterscheidbar und vorhanden sind
 - das Gegenargument fair und nicht als Strohmann formuliert ist
 - der Handlungsvorschlag konkret ist
-- die Prueffrage wirklich trennt statt nur rhetorisch zu wirken
+- die Prüffrage wirklich trennt statt nur rhetorisch zu wirken
 - das Signal im Alltag beobachtbar ist
 - keine Platzhalter mehr enthalten sind
 - der Text mehr Erkenntnis als Pose liefert
@@ -90,8 +90,8 @@ Ein Text darf `ai-approved` sein, wenn:
 Ein Text darf `author-approved` sein, wenn:
 
 - Daniel den Text inhaltlich vertreten will
-- Ton, Schaerfe und Beispiele bewusst so gewollt sind
-- der Text als oeffentliche Aussage tragfaehig ist
+- Ton, Schärfe und Beispiele bewusst so gewollt sind
+- der Text als öffentliche Aussage tragfähig ist
 - die Zuspitzung nicht nur effektiv, sondern wahr ist
 
 ### 5. Published
@@ -132,7 +132,7 @@ Jeder Text braucht im Frontmatter:
 
 ## Harte Blocker
 
-Ein Text darf nicht veroeffentlicht werden, wenn:
+Ein Text darf nicht veröffentlicht werden, wenn:
 
 - Pflichtfelder fehlen
 - `TODO`, `xxx`, `spaeter`, `ergaenzen` oder andere Platzhalter enthalten sind
@@ -148,10 +148,10 @@ Ein Text darf nicht veroeffentlicht werden, wenn:
 
 Die KI hilft beim:
 
-- Schaerfen von Titel und These
+- Schärfen von Titel und These
 - Verdichten der Struktur
-- Ergaenzen fairer Gegenargumente
-- Pruefen gegen die interne Checkliste
+- Ergänzen fairer Gegenargumente
+- Prüfen gegen die interne Checkliste
 
 Die KI ersetzt nicht die Autorenverantwortung.
 
@@ -161,7 +161,7 @@ Daniel entscheidet:
 
 - ob der Text wirklich sein Gedanke ist
 - ob die Zuspitzung stimmt
-- ob der Text oeffentlich gewollt ist
+- ob der Text öffentlich gewollt ist
 - ob der Text live gehen soll
 
 ## Arbeitslogik
@@ -169,9 +169,9 @@ Daniel entscheidet:
 Der praktische Ablauf ist:
 
 1. Daniel bringt Rohgedanke, Notiz oder Entwurf.
-2. Die KI hilft beim Schaerfen und Strukturieren.
+2. Die KI hilft beim Schärfen und Strukturieren.
 3. Der Text wird auf `ready-for-ai-review` gesetzt.
-4. Die KI prueft gegen diese Richtlinie.
+4. Die KI prüft gegen diese Richtlinie.
 5. Bei Bestehen wird `ai_approved` gesetzt.
 6. Daniel liest die finale Fassung bewusst als Autor.
 7. Bei Zustimmung wird `author_approved` gesetzt.
@@ -188,4 +188,4 @@ Der praktische Ablauf ist:
 
 ## Kurzregel
 
-Kein Text ohne These. Kein Text ohne Mechanik. Kein Text ohne Gegenargument. Kein Text ohne Handlungsvorschlag. Kein Text ohne Prueffrage. Kein Text ohne Signal. Kein Publish ohne doppelte Freigabe.
+Kein Text ohne These. Kein Text ohne Mechanik. Kein Text ohne Gegenargument. Kein Text ohne Handlungsvorschlag. Kein Text ohne Prüffrage. Kein Text ohne Signal. Kein Publish ohne doppelte Freigabe.
