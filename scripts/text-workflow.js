@@ -555,26 +555,6 @@ function renderArticlePageAtPath(article, articlePath) {
                     <span>${escapeHtml(article.data.title)}</span>
                 </div>
                 <div class="article-actions">
-                    <a
-                        class="article-action-icon"
-                        href="${articlePath}"
-                        title="Direktlink zum Text"
-                        aria-label="Direktlink zum Text"
-                    >
-                        <svg
-                            class="article-action-svg"
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-                            <path d="M7 17 17 7"></path>
-                            <path d="M9 7h8v8"></path>
-                        </svg>
-                    </a>
                     <button
                         class="article-action-icon"
                         type="button"
