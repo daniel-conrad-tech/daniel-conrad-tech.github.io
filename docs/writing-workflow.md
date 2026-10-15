@@ -130,6 +130,10 @@ Jeder Text braucht im Frontmatter:
 - `author_approved_at`
 - `author_review_notes`
 
+## Tag-Schreibweise
+
+Tags werden als lesbare Begriffe geschrieben und beginnen mit einem Großbuchstaben. Deutsche Zusammensetzungen folgen der normalen Rechtschreibung; Eigennamen und technische Bezeichnungen behalten ihre übliche Schreibweise, zum Beispiel `Java` oder `KI`. Derselbe Begriff wird im gesamten Archiv einheitlich geschrieben.
+
 ## Harte Blocker
 
 Ein Text darf nicht veröffentlicht werden, wenn:
