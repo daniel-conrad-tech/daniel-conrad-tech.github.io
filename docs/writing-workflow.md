@@ -177,6 +177,15 @@ Der praktische Ablauf ist:
 7. Bei Zustimmung wird `author_approved` gesetzt.
 8. Erst danach darf der Text auf `published` gehen.
 
+## Layout-Vorschau für Drafts
+
+- `npm run build` baut ausschließlich die öffentliche Seite und entfernt vorhandene generierte Vorschauseiten. Die Markdown-Entwürfe unter `drafts/` bleiben erhalten.
+- `npm run build:preview` baut zusätzlich lokale Entwurfsvorschauen unter `/texte/vorschau/`.
+- `npm run preview:full` führt den Vorschau-Build aus und startet den lokalen HTTP-Server.
+- Öffentliche Startseite und Textarchiv enthalten in keinem Build-Modus Vorschau-Links oder Entwurfszahlen. Die lokale Entwurfsübersicht ist direkt unter `http://localhost:4173/texte/vorschau/` erreichbar.
+- `drafts/` und die erzeugten Dateien unter `texte/vorschau/` sind von Git ausgeschlossen. Vorschauseiten dürfen nicht mit `git add -f` aufgenommen werden. Vor einer Veröffentlichung `npm run build` ausführen; `.gitignore` allein schützt nicht beim Hochladen des gesamten Arbeitsverzeichnisses.
+- Ohne lokale Drafts erzeugt der Vorschau-Build nur eine leere Entwurfsübersicht.
+
 ## Kurzregel
 
 Kein Text ohne These. Kein Text ohne Mechanik. Kein Text ohne Gegenargument. Kein Text ohne Handlungsvorschlag. Kein Text ohne Prueffrage. Kein Text ohne Signal. Kein Publish ohne doppelte Freigabe.

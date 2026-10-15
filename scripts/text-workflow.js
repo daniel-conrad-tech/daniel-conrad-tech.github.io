@@ -6,6 +6,7 @@ const path = require("path");
 const repoRoot = path.resolve(__dirname, "..");
 const draftsDir = path.join(repoRoot, "drafts");
 const textsDir = path.join(repoRoot, "texte");
+const previewDraftsDir = path.join(textsDir, "vorschau");
 const indexPath = path.join(repoRoot, "index.html");
 
 const requiredPublishFields = [
@@ -142,7 +143,7 @@ const headingIconMap = new Map([
     [
         "?",
         {
-            label: "Prüffrage",
+            label: "Prueffrage",
             svg: `<svg class="section-heading-icon" viewBox="0 0 28 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 10.6a3.6 3.6 0 1 1 5.7 3c-1.1.8-2.1 1.6-2.1 3"></path><path d="M14 20.6h.01"></path><circle cx="14" cy="14" r="11"></circle></svg>`,
         },
     ],
@@ -491,12 +492,15 @@ function siteShell({ title, description, currentPath, mainContent }) {
 }
 
 function renderArticlePage(article) {
+    return renderArticlePageAtPath(article, `/texte/${article.data.slug}.html`);
+}
+
+function renderArticlePageAtPath(article, articlePath) {
     const title = `${article.data.title} | Daniel Conrad`;
     const tags = Array.isArray(article.data.tags) ? article.data.tags : [];
     const bodyHtml = renderMarkdown(
         stripLeadingMarkdownTitle(article.body, article.data.title),
     );
-    const articlePath = `/texte/${article.data.slug}.html`;
     const shareUrl = `https://daniel-conrad.tech${articlePath}`;
 
     return siteShell({
@@ -612,6 +616,41 @@ function renderArchivePage(articles) {
     });
 }
 
+function renderPreviewArchivePage(articles) {
+    const cards =
+        articles.length > 0
+            ? articles.map((article) =>
+                  renderArchiveCard({
+                      ...article,
+                      data: {
+                          ...article.data,
+                          slug: `vorschau/${article.data.slug}`,
+                      },
+                  }),
+              ).join("\n")
+            : `<article class="article-list-card">
+        <h3 class="article-list-title">Noch keine Vorschau-Texte</h3>
+        <p class="article-list-summary">Sobald Drafts im Repository liegen, werden sie hier für die lokale Layout-Prüfung gerendert.</p>
+    </article>`;
+
+    return siteShell({
+        title: "Text-Vorschau | Daniel Conrad",
+        description:
+            "Lokale Vorschauseiten für Drafts, damit Layoutbrüche vor der Veröffentlichung sichtbar werden.",
+        currentPath: "/texte/vorschau/index.html",
+        mainContent: `<main class="archive-page">
+            <section class="archive-hero">
+                <p class="archive-kicker">Text-Vorschau</p>
+                <h1 class="archive-title">Drafts als lokale Render-Vorschau</h1>
+                <p class="archive-summary">Diese Seite ist für die lokale Vorschau gedacht. Sie rendert Drafts vor der Freigabe, damit Layout, Codebeispiele und Abschnittsstruktur früh sichtbar werden.</p>
+            </section>
+            <section class="archive-list">
+                ${cards}
+            </section>
+        </main>`,
+    });
+}
+
 function renderHomeCards(articles) {
     if (articles.length === 0) {
         return `<p class="section-copy">Noch keine veröffentlichten Texte.</p>`;
@@ -651,11 +690,20 @@ function getPublishedArticles() {
         .sort((left, right) => right.data.date.localeCompare(left.data.date));
 }
 
+function getPreviewDraftArticles() {
+    return listDrafts()
+        .filter((draft) => draft.data.status !== "published")
+        .sort((left, right) => right.data.date.localeCompare(left.data.date));
+}
+
 function writePublishedSite() {
     const articles = getPublishedArticles();
 
     fs.mkdirSync(textsDir, { recursive: true });
-    fs.writeFileSync(path.join(textsDir, "index.html"), renderArchivePage(articles));
+    fs.writeFileSync(
+        path.join(textsDir, "index.html"),
+        renderArchivePage(articles),
+    );
 
     for (const article of articles) {
         fs.writeFileSync(
@@ -682,6 +730,42 @@ function writePublishedSite() {
     fs.writeFileSync(indexPath, updatedIndex);
 
     return articles;
+}
+
+function writePreviewDraftSite() {
+    const articles = getPreviewDraftArticles();
+
+    fs.mkdirSync(previewDraftsDir, { recursive: true });
+    fs.writeFileSync(
+        path.join(previewDraftsDir, "index.html"),
+        renderPreviewArchivePage(articles),
+    );
+
+    for (const article of articles) {
+        fs.writeFileSync(
+            path.join(previewDraftsDir, `${article.data.slug}.html`),
+            renderArticlePageAtPath(article, `/texte/vorschau/${article.data.slug}.html`),
+        );
+    }
+
+    const existingPreviewFiles = fs
+        .readdirSync(previewDraftsDir)
+        .filter((name) => name.endsWith(".html") && name !== "index.html");
+    const previewSlugs = new Set(articles.map((article) => `${article.data.slug}.html`));
+
+    for (const filename of existingPreviewFiles) {
+        if (!previewSlugs.has(filename)) {
+            fs.unlinkSync(path.join(previewDraftsDir, filename));
+        }
+    }
+
+    return articles;
+}
+
+function removePreviewDraftSite() {
+    if (fs.existsSync(previewDraftsDir)) {
+        fs.rmSync(previewDraftsDir, { recursive: true, force: true });
+    }
 }
 
 function serializeField(key, value) {
@@ -754,8 +838,11 @@ function publishDraft(targetPath) {
 module.exports = {
     draftsDir,
     getPublishedArticles,
+    getPreviewDraftArticles,
     publishDraft,
+    removePreviewDraftSite,
     repoRoot,
     validateForPublish,
+    writePreviewDraftSite,
     writePublishedSite,
 };

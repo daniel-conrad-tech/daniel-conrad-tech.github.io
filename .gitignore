@@ -21,3 +21,6 @@ temp/
 
 # Local drafts
 drafts/
+
+# Generated local draft previews
+/texte/vorschau/
