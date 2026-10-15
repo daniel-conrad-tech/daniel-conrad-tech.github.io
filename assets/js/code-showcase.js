@@ -195,6 +195,7 @@ function syncCodeShowcase(example) {
 
     if (title) {
         title.textContent = label;
+        title.hidden = !example.dataset.codeLabel;
     }
 
     if (note) {
@@ -236,6 +237,7 @@ function createCodeShowcase(example, index) {
     const title = document.createElement("p");
     title.className = "code-showcase-title";
     title.textContent = example.dataset.codeLabel || strings.fallbackLabel;
+    title.hidden = !example.dataset.codeLabel;
 
     const note = document.createElement("p");
     note.className = "code-showcase-note";

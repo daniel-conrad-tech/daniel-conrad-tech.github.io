@@ -61,6 +61,7 @@ const codeExampleLabelMap = new Map([
     ["html", "HTML"],
     ["css", "CSS"],
     ["json", "JSON"],
+    ["java", "Java"],
     ["bash", "Shell"],
     ["sh", "Shell"],
     ["shell", "Shell"],
@@ -85,10 +86,9 @@ function parseCodeFenceInfo(infoString) {
 
     const language = cleanedInfo.trim().split(/\s+/)[0] || "";
     const normalizedLanguage = language.toLowerCase();
-    const defaultLabel =
-        attributes.label ||
-        codeExampleLabelMap.get(normalizedLanguage) ||
-        (language ? language.toUpperCase() : "Code");
+    const defaultLabel = attributes.label || (attributes.note
+        ? ""
+        : codeExampleLabelMap.get(normalizedLanguage) || (language ? language.toUpperCase() : "Code"));
 
     return {
         language,
@@ -103,7 +103,7 @@ function renderCodeExample(code, options = {}) {
         `class="code-panel"`,
         `data-code-example="true"`,
         `data-code-open="${options.open === false ? "false" : "true"}"`,
-        `data-code-label="${escapeHtml(options.label || "Code")}"`,
+        `data-code-label="${escapeHtml(options.label)}"`,
     ];
 
     if (options.language) {
@@ -168,6 +168,13 @@ const headingIconMap = new Map([
         {
             label: "Signal",
             svg: `<svg class="section-heading-icon" viewBox="0 0 28 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8.5v7"></path><path d="M14 20.2h.01"></path><circle cx="14" cy="14" r="11"></circle></svg>`,
+        },
+    ],
+    [
+        "✧",
+        {
+            label: "KI-Bezug",
+            svg: `<svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3.5 2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5 2.5-6Z"></path><path d="m19 3 .7 1.8L21.5 5.5l-1.8.7L19 8l-.7-1.8-1.8-.7 1.8-.7L19 3Z"></path></svg>`,
         },
     ],
 ]);

@@ -152,7 +152,7 @@ Unterstützt werden aktuell:
 - `note="..."`
 - `open="false"`
 
-Ohne Angaben wird das Label aus der Sprachkennung abgeleitet und der Block standardmäßig geöffnet angezeigt.
+Ohne Notiz wird das Label aus der Sprachkennung abgeleitet und der Block standardmäßig geöffnet angezeigt. Wenn eine Notiz gesetzt ist und kein eigenes `label` angegeben wurde, ersetzt die Notiz das automatische Sprachlabel. Ein explizites `label` bleibt neben der Notiz sichtbar.
 
 ## Wann Textbutton, wann Icon-Button
 
