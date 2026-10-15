@@ -366,6 +366,7 @@ function renderMarkdown(markdown) {
     const html = [];
     let paragraphBuffer = [];
     let listBuffer = [];
+    let quoteBuffer = [];
     let codeFenceInfo = null;
     let codeFenceBuffer = [];
 
@@ -389,6 +390,15 @@ function renderMarkdown(markdown) {
         listBuffer = [];
     }
 
+    function flushQuote() {
+        if (quoteBuffer.length === 0) {
+            return;
+        }
+
+        html.push(`<blockquote><p>„${renderInline(quoteBuffer.join(" "))}“</p></blockquote>`);
+        quoteBuffer = [];
+    }
+
     for (const line of lines) {
         if (codeFenceInfo) {
             if (line.trim().startsWith("```")) {
@@ -409,6 +419,7 @@ function renderMarkdown(markdown) {
         if (!trimmed) {
             flushParagraph();
             flushList();
+            flushQuote();
             continue;
         }
 
@@ -416,6 +427,7 @@ function renderMarkdown(markdown) {
         if (codeFenceStart) {
             flushParagraph();
             flushList();
+            flushQuote();
             codeFenceInfo = parseCodeFenceInfo(codeFenceStart[1]);
             codeFenceBuffer = [];
             continue;
@@ -425,6 +437,7 @@ function renderMarkdown(markdown) {
         if (headingMatch) {
             flushParagraph();
             flushList();
+            flushQuote();
             const level = Math.min(headingMatch[1].length, 3);
             html.push(renderHeading(level, headingMatch[2]));
             continue;
@@ -433,16 +446,27 @@ function renderMarkdown(markdown) {
         const listMatch = trimmed.match(/^- (.*)$/);
         if (listMatch) {
             flushParagraph();
+            flushQuote();
             listBuffer.push(listMatch[1]);
             continue;
         }
 
+        const quoteMatch = trimmed.match(/^>\s?(.*)$/);
+        if (quoteMatch) {
+            flushParagraph();
+            flushList();
+            quoteBuffer.push(quoteMatch[1]);
+            continue;
+        }
+
         flushList();
+        flushQuote();
         paragraphBuffer.push(trimmed);
     }
 
     flushParagraph();
     flushList();
+    flushQuote();
 
     if (codeFenceInfo) {
         html.push(renderCodeExample(codeFenceBuffer.join("\n"), codeFenceInfo));
@@ -582,6 +606,10 @@ function renderArticlePageAtPath(article, articlePath) {
                     <p class="article-summary">${escapeHtml(article.data.summary)}</p>
                     <div class="article-meta">
                         <time datetime="${escapeHtml(article.data.date)}">${escapeHtml(formatGermanDate(article.data.date))}</time>
+                        <span class="ai-disclosure" tabindex="0" aria-label="In Zusammenarbeit mit KI erstellt; inhaltlich geprüft und redaktionell verantwortet von Daniel Conrad.">
+                            <span class="ai-disclosure-mark" aria-hidden="true">KI</span>
+                            <span class="ai-disclosure-tooltip" role="tooltip">In Zusammenarbeit mit KI erstellt; inhaltlich geprüft und redaktionell verantwortet von Daniel Conrad.</span>
+                        </span>
                     </div>
                     <ul class="article-tags">${renderTagList(tags)}</ul>
                 </header>
