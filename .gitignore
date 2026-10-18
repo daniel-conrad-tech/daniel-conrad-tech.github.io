@@ -22,5 +22,9 @@ temp/
 # Local drafts
 drafts/
 
+# Local task list
+/Tasks.md
+/TASKS.md
+
 # Generated local draft previews
 /texte/vorschau/
