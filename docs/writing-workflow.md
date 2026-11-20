@@ -41,6 +41,8 @@ Nicht jeder Text muss alle Sektionen gleich lang behandeln. Die Schlusssektionen
 
 Technische Beiträge können nach dem Handlungsvorschlag die Sektion `✦ Agentenregel` enthalten, wenn sich eine belastbare Arbeitsanweisung für Coding-Agenten ableiten lässt. Sie beschreibt Anlass, Vorgehen und Grenzen als kopierbaren Markdown-Codeblock für eine `AGENTS.md`. Das Abschnittsicon zeigt einen vierzackigen Stern im Kreis.
 
+Wenn ein Text Studien als Belege verwendet, ordnet er sie in einem eigenen Abschnitt `⌕ Geliehene Autorität` ein. Das Abschnittsicon ist eine Lupe. Für die verwendeten Studien erklärt der Text, was tatsächlich untersucht wurde, welchen Teil der These die Ergebnisse stützen und wo die Übertragbarkeit endet. Die Quellen werden direkt verlinkt.
+
 ## Statusmodell
 
 - `draft`
@@ -81,11 +83,15 @@ Ein Text darf `ai-approved` sein, wenn:
 - die These in 1 bis 2 Saetzen formulierbar ist
 - `Muster` und `Mechanik` klar unterscheidbar und vorhanden sind
 - das Gegenargument fair und nicht als Strohmann formuliert ist
+- die Gültigkeitsgrenzen jeder empfohlenen Regel benannt sind: In welchem Kontext hilft sie, wann greift sie nicht und welche Abwägung kann eine Ausnahme rechtfertigen?
+- die These auf unbegründete Verallgemeinerungen geprüft ist: Tragen Belege und Beispiele die behauptete Reichweite, und welche Gegenbeispiele würden eine Einschränkung oder Revision erfordern?
 - der Handlungsvorschlag konkret ist
 - die Prüffrage wirklich trennt statt nur rhetorisch zu wirken
 - das Signal im Alltag beobachtbar ist
 - keine Platzhalter mehr enthalten sind
 - der Text mehr Erkenntnis als Pose liefert
+
+Die KI hält das Ergebnis der beiden Prüfungen zu Gültigkeitsgrenzen und Verallgemeinerungen in `ai_review_notes` fest. Sie widerspricht auch einer vom Autor bevorzugten These, wenn deren Reichweite über die Belege hinausgeht. Pointierte Titel sind zulässig, wenn der Text die Zuspitzung nachvollziehbar einordnet. Eine Faustregel braucht eine zu ihrem Anspruch passende Begründung; eine empirische Behauptung braucht entsprechende Belege.
 
 ### 4. Author Approved
 

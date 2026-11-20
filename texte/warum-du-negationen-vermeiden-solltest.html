@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Warum du Negationen vermeiden solltest | Daniel Conrad</title>
+        <meta name="description" content="Eine Bedingung sollte ihre Bedeutung direkt aussprechen. Wie isEmpty() implizite String-Logik ersetzt, wann ausgeschriebene Negationen helfen und wo diese Regel ihre Grenzen hat." />
+        <link rel="stylesheet" href="/assets/css/style.css" />
+        <link rel="canonical" href="https://daniel-conrad.tech/texte/warum-du-negationen-vermeiden-solltest.html" />
+    </head>
+    <body class="min-h-screen antialiased">
+        <header class="site-header">
+            <a class="logo-mark" href="/">Daniel Conrad</a>
+            <nav class="site-nav">
+                <a class="nav-link" href="/#projekte">Projekte</a>
+                <a class="nav-link" href="/texte/">Texte</a>
+                <a class="nav-link" href="/#kontakt">Kontakt</a>
+            </nav>
+        </header>
+
+        <main class="article-page">
+            <div class="article-topbar">
+                <div class="article-breadcrumb">
+                    <a class="inline-link" href="/texte/">Texte</a>
+                    <span class="article-breadcrumb-separator">/</span>
+                    <span>Warum du Negationen vermeiden solltest</span>
+                </div>
+                <div class="article-actions">
+                    <button
+                        class="article-action-icon"
+                        type="button"
+                        data-copy-link
+                        data-copy-url="https://daniel-conrad.tech/texte/warum-du-negationen-vermeiden-solltest.html"
+                        title="Link kopieren"
+                        aria-label="Link kopieren"
+                    >
+                        <svg
+                            class="article-action-svg"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <rect x="9" y="9" width="10" height="10" rx="2"></rect>
+                            <path d="M5 15V7a2 2 0 0 1 2-2h8"></path>
+                        </svg>
+                    </button>
+                    <span class="article-action-status" data-copy-status aria-live="polite"></span>
+                </div>
+            </div>
+            <article>
+                <header class="article-header">
+                    <h1 class="article-title">Warum du Negationen vermeiden solltest</h1>
+                    <p class="article-summary">Eine Bedingung sollte ihre Bedeutung direkt aussprechen. Wie isEmpty() implizite String-Logik ersetzt, wann ausgeschriebene Negationen helfen und wo diese Regel ihre Grenzen hat.</p>
+                    <div class="article-meta">
+                        <time datetime="2026-11-20">20. November 2026</time>
+                        <span class="ai-disclosure" tabindex="0" aria-label="In Zusammenarbeit mit KI erstellt; inhaltlich geprüft und redaktionell verantwortet von Daniel Conrad.">
+                            <span class="ai-disclosure-mark" aria-hidden="true">KI</span>
+                            <span class="ai-disclosure-tooltip" role="tooltip">In Zusammenarbeit mit KI erstellt; inhaltlich geprüft und redaktionell verantwortet von Daniel Conrad.</span>
+                        </span>
+                    </div>
+                    <ul class="article-tags"><li class="article-tag">Softwaredesign</li><li class="article-tag">TypeScript</li><li class="article-tag">Lesbarkeit</li><li class="article-tag">KI</li></ul>
+                </header>
+                <div class="article-content">
+                    <p>Eine Bedingung sollte sagen, welchen Zustand sie prüft. Wenn ich dafür erst einen String als Wahrheitswert lesen und das Ergebnis umkehren muss, kann ein passender Methodenname die Absicht klarer ausdrücken.</p>
+<p>Im Beitrag <a href="/texte/sonderfaelle-frueh-abschliessen.html">Sonderfälle früh abschließen</a> habe ich den leeren Originaltext mit einer Guard Clause behandelt. Der Ablauf wurde dadurch einfacher. An der Bedingung lässt sich weiterarbeiten.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5 19 18H5Z"></path></svg></span><span class="section-heading-label">Diagnose</span></h2>
+<p>Der Renderer hängt den Originaltext als Zitat an eine Antwort an. Bei leerem Originaltext genügt die Antwort. Der Anfang der Methode sieht bisher so aus:</p>
+<pre class="code-panel" data-code-example="true" data-code-open="true" data-code-label="" data-code-language="ts" data-code-note="Bisherige Bedingung"><code>render(response: ReplyBody, original: OriginalBody): DraftBody {
+    const responseText = response.toString();
+    const originalText = original.toString();
+
+    if (!originalText) {
+        return DraftBody.create(responseText);
+    }</code></pre>
+<p>Wer TypeScript kennt, kann das lesen. Trotzdem steht die Regel „Der Originaltext ist leer“ nur indirekt dort. <code>!</code> wertet den String als Boolean aus und negiert ihn. Der Ausdruck <code>!originalText</code> ergibt bei einer leeren Zeichenkette <code>true</code>, bei jeder nicht leeren Zeichenkette <code>false</code>.</p>
+<p>Ich würde die Bedeutung direkt benennen:</p>
+<pre class="code-panel" data-code-example="true" data-code-open="true" data-code-label="" data-code-language="ts" data-code-note="Der Zustand steht am Aufruf"><code>if (original.isEmpty()) {
+    return DraftBody.create(responseText);
+}</code></pre>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="4.5" width="6" height="6" rx="1.2"></rect><rect x="13.5" y="4.5" width="6" height="6" rx="1.2"></rect><rect x="4.5" y="13.5" width="6" height="6" rx="1.2"></rect><rect x="13.5" y="13.5" width="6" height="6" rx="1.2"></rect></svg></span><span class="section-heading-label">Muster</span></h2>
+<p>Ein Objekt hat bereits einen Namen aus dem Anwendungsfall: <code>OriginalBody</code>. Für die Entscheidung wird es trotzdem zuerst in seine technische Darstellung umgewandelt. Der Aufrufer leitet aus dieser Darstellung selbst ab, ob der Inhalt leer ist.</p>
+<p>Damit kennt der Aufrufer zwei Dinge: wie das Objekt seinen Text liefert und wie daraus Leerheit bestimmt wird. Eine Methode <code>isEmpty()</code> gibt dieser zweiten Frage einen eigenen Vertrag.</p>
+<p>Gerade beim Lesen eines Diffs oder eines einzelnen Ausschnitts kann Kontext fehlen. Ein guter Methodenname liefert einen Teil davon direkt mit.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.1"></circle><path d="M12 3.8v2.1"></path><path d="M12 18.1v2.1"></path><path d="m18.2 5.8-1.5 1.5"></path><path d="m7.3 16.7-1.5 1.5"></path><path d="M20.2 12h-2.1"></path><path d="M5.9 12H3.8"></path><path d="m18.2 18.2-1.5-1.5"></path><path d="m7.3 7.3-1.5-1.5"></path><circle cx="12" cy="12" r="7.1"></circle></svg></span><span class="section-heading-label">Mechanik</span></h2>
+<p><code>OriginalBody</code> bekommt eine Zustandsprüfung. Wenn das Objekt seinen Inhalt intern als String <code>text</code> hält, kann sie so aussehen:</p>
+<pre class="code-panel" data-code-example="true" data-code-open="true" data-code-label="" data-code-language="ts" data-code-note="Methode in OriginalBody"><code>isEmpty(): boolean {
+    return this.text.length === 0;
+}</code></pre>
+<p>Dabei muss <code>text</code> genau dem bisherigen Ergebnis von <code>toString()</code> entsprechen. Ein Text aus Leerzeichen bleibt Inhalt. Ein zusätzliches <code>trim()</code> würde das Verhalten ändern.</p>
+<p>Der Renderer kann anschließend den leeren Fall behandeln, bevor er den Text zum Zitieren abfragt:</p>
+<pre class="code-panel" data-code-example="true" data-code-open="true" data-code-label="" data-code-language="ts" data-code-note="Mit benannter Zustandsprüfung"><code>export class ReplyDraftBodyRenderer {
+    render(response: ReplyBody, original: OriginalBody): DraftBody {
+        const responseText = response.toString();
+
+        if (original.isEmpty()) {
+            return DraftBody.create(responseText);
+        }
+
+        const originalText = original.toString();
+        const quote = originalText
+            .split("\n")
+            .map(line =&gt; `&gt; ${line}`)
+            .join("\n");
+
+        return DraftBody.create(`${responseText}\n\n${quote}`);
+    }
+}</code></pre>
+<p>Diese Fassung setzt eine reine, stabile String-Darstellung voraus. Im leeren Fall wird <code>original.toString()</code> jetzt nicht mehr aufgerufen. Hätte dieser Aufruf Seiteneffekte, müsste der Umbau sie gesondert berücksichtigen.</p>
+<h3>Auch Symbole gehören zur Lesbarkeit</h3>
+<p>Eine zweite Frage betrifft die Schreibweise einer Negation:</p>
+<pre class="code-panel" data-code-example="true" data-code-open="true" data-code-label="" data-code-language="ts" data-code-note="Symbolische Negation"><code>if (!isAuthorized()) {
+    return;
+}</code></pre>
+<p>Ich finde die ausgeschriebene Bedingung hier klarer:</p>
+<pre class="code-panel" data-code-example="true" data-code-open="true" data-code-label="" data-code-language="ts" data-code-note="Ausgeschriebene Bedingung"><code>if (isNotAuthorized()) {
+    return;
+}</code></pre>
+<p>Die Negation bleibt sprachlich erhalten. Ihr Bezug steht nun im selben Namen. Das ist ein Entwurfsurteil zur Lesbarkeit, kein durch die folgenden Studien belegter Geschwindigkeitsvorteil dieses konkreten Aufrufs.</p>
+<p>Für diesen Austausch muss <code>isNotAuthorized()</code> bei gleicher Eingabe exakt das negierte Ergebnis von <code>isAuthorized()</code> liefern. Ein eigener Zustand wie „ausdrücklich abgelehnt“ wäre ein anderer Vertrag, falls beispielsweise auch „noch ungeprüft“ vorkommen kann.</p>
+<p><code>isEmpty()</code> geht einen Schritt weiter: Es benennt den gesuchten Zustand mit einem eigenen Begriff. Bei einer Berechtigung kann die verneinte Form dagegen genau dem Fall entsprechen, den die Guard Clause abschließen soll.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m15.2 15.2 5.3 5.3"></path></svg></span><span class="section-heading-label">Geliehene Autorität</span></h2>
+<p>Die folgenden Studien stützen Teile meiner Empfehlung. Entscheidend ist, was sie tatsächlich untersucht haben und wie weit sich ihre Ergebnisse auf dieses Beispiel übertragen lassen.</p>
+<p>Baron und Kollegen untersuchten 2024 logische Ausdrücke mit <strong>205 professionellen Entwicklern</strong>. Im Allgemeinen benötigten Ausdrücke mit mehr Negationen mehr Verständniszeit; doppelte Negationen waren besonders schwierig. Die Ergebnisse hängen zugleich von weiteren Eigenschaften der Ausdrücke ab. Die Untersuchung stützt eine bewusste Reduktion von Negationen, untersucht aber nicht den Vergleich von <code>!originalText</code> mit <code>original.isEmpty()</code>. <a href="https://conf.researchr.org/details/ease-2024/ease-2024-papers/5/Understanding-Logical-Expressions-with-Negations-Its-Complicated">Studie: Understanding Logical Expressions with Negations: Its Complicated</a></p>
+<p>Auch bei menschlicher Sprache zählt der Kontext. Nieuwland und Kuperberg zeigten, dass Leser passend eingebettete Negationen unmittelbar in die Bedeutung integrieren können. Daraus folgt keine Regel, nach der jede Negation zwingend einen bewussten zusätzlichen Denkschritt erfordert. <a href="https://www.psychologicalscience.org/journals/psychological-science/j.1467-9280.2008.02226.x/">Studie zur Verarbeitung im Kontext</a></p>
+<h3>Was das mit KI zu tun hat</h3>
+<p>Jang und Kollegen fanden bei den 2023 untersuchten Sprachmodellen erhebliche Schwierigkeiten mit negierten Prompts. Das liefert einen weiteren Anlass, Anweisungen und Bedingungen sorgfältig zu formulieren. Die Untersuchung betrifft natürlichsprachliche Aufgaben mit damaligen Modellen. Sie belegt keinen Vorteil von <code>isEmpty()</code> bei heutigen Coding-Agenten. <a href="https://proceedings.mlr.press/v203/jang23a.html">Studie zu negierten Prompts</a></p>
+<p>Meine Entwurfsbegründung bleibt überprüfbar: Ein benanntes Prädikat macht die Absicht am Aufruf sichtbar. Ob ein bestimmtes Modell damit zuverlässiger arbeitet, müsste ein Vergleich am konkreten Code zeigen.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13"></path><path d="m14 4 4 4-4 4"></path><path d="M20 16H7"></path><path d="m10 12-4 4 4 4"></path></svg></span><span class="section-heading-label">Gegenargument</span></h2>
+<p><code>!isAuthorized()</code> ist für viele Entwickler vertraut und unmittelbar verständlich. Für jeden solchen Ausdruck eine Gegenmethode einzuführen, vergrößert die Schnittstelle. Wird <code>isNotAuthorized()</code> später selbst negiert, entsteht mit <code>!isNotAuthorized()</code> eine doppelte Verneinung. Eine ausgeschriebene Form ist deshalb keine automatische Verbesserung.</p>
+<p>Auch <code>isEmpty()</code> hilft nur, wenn seine Bedeutung klar ist. Zählt ein Text aus Leerzeichen als leer? Gibt es unsichtbares Markup? Der Name stellt die richtige Frage; der Vertrag muss sie beantworten.</p>
+<p>Die Empfehlung gilt dort, wo eine benannte Prüfung Bedeutung erschließt oder eine wiederkehrende Regel bündelt. Eine kurze, vertraute Negation darf bleiben, wenn eine zusätzliche Methode keinen erkennbaren Gewinn bringt. Der Titel zielt auf vermeidbare Übersetzungsarbeit beim Lesen.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"></path></svg></span><span class="section-heading-label">Handlungsvorschlag</span></h2>
+<p>Lies eine Bedingung als Satz über den Anwendungsfall. Prüft sie „Originaltext ist leer“, sollte ein vorhandenes <code>OriginalBody</code> diese Frage beantworten können.</p>
+<p>Prüfe bei negierten Prädikaten zusätzlich, welche Form den behandelten Fall am klarsten benennt. Berücksichtige die bestehenden Aufrufe und Begriffe. Eine neue Methode sollte eine verständliche Frage ausdrücken und einen eindeutigen Vertrag haben.</p>
+<p>Bewahre beim Umbau die bisherige Bedeutung. Für diesen Renderer heißt das insbesondere: Nur der String ohne Zeichen ist leer; Leerzeichen bleiben erhalten.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 28 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="14" r="11"></circle><path d="m14 7 2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5Z"></path></svg></span><span class="section-heading-label">Agentenregel</span></h2>
+<pre class="code-panel" data-code-example="true" data-code-open="true" data-code-label="" data-code-language="md" data-code-note="Agentenregel für die AGENTS.md"><code>## Bedingungen direkt benennen
+
+Wenn eine Bedingung einen Zustand aus einer technischen Darstellung
+ableitet, prüfe, ob das zuständige Objekt ein passendes Prädikat
+anbieten sollte, etwa original.isEmpty() statt !originalText.
+
+Prüfe bei negierten Prädikaten, ob eine ausgeschriebene Bedingung
+den behandelten Fall klarer ausdrückt. Berücksichtige vorhandene
+Begriffe und Aufrufe; vermeide doppelte Negationen.
+
+Führe zusätzliche Methoden ein, wenn sie Bedeutung erschließen
+oder eine Regel bündeln. Vertraute, klar lesbare Negationen dürfen
+bleiben. Begründe den Nutzen am konkreten Code.
+
+Bewahre die Definition des Zustands, relevante Seiteneffekte und
+Auswertungsreihenfolgen. Verändere insbesondere die Behandlung
+von Leerzeichen nicht nebenbei.</code></pre>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 28 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 10.6a3.6 3.6 0 1 1 5.7 3c-1.1.8-2.1 1.6-2.1 3"></path><path d="M14 20.6h.01"></path><circle cx="14" cy="14" r="11"></circle></svg></span><span class="section-heading-label">Prüffrage</span></h2>
+<p>Kann ich am Aufruf sagen, welcher Zustand geprüft wird, und ist klar, welche Werte ihn erfüllen?</p>
+<p>Im Renderer lautet die Antwort: <code>original.isEmpty()</code> prüft, ob der Originaltext kein einziges Zeichen enthält.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 28 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8.5v7"></path><path d="M14 20.2h.01"></path><circle cx="14" cy="14" r="11"></circle></svg></span><span class="section-heading-label">Signal</span></h2>
+<p>Ein gutes Zeichen: Im Review wird die Bedingung mit denselben Begriffen erklärt wie die fachliche Regel. Die Definition von „leer“ liegt in <code>OriginalBody</code>; Aufrufer müssen sie nicht erneut aus dem String ableiten.</p>
+<p>Ein Warnzeichen: Es entstehen Methodenpaare ohne klaren Bedarf, Aufrufer negieren bereits negative Namen oder niemand kann erklären, ob Leerzeichen als Inhalt zählen. Dann hat die Umbenennung die Bedeutung noch nicht ausreichend geklärt.</p>
+                </div>
+            </article>
+        </main>
+        <script src="/assets/js/code-showcase.js" defer></script>
+        <script src="/assets/js/article-actions.js" defer></script>
+
+        <footer class="site-footer">
+            <div class="footer-row">
+                <p>© 2026 Daniel Conrad</p>
+                <nav class="footer-links">
+                    <a class="footer-link" href="/impressum.html">Impressum</a>
+                    <a class="footer-link" href="/datenschutz.html">Datenschutz</a>
+                </nav>
+            </div>
+        </footer>
+    </body>
+</html>

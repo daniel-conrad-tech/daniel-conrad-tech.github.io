@@ -38,17 +38,20 @@ function escapeHtml(value) {
 }
 
 function renderInline(text) {
-    const escaped = escapeHtml(text);
-    const segments = escaped.split(/(`[^`]+`|\*\*[^*]+\*\*)/g);
+    const segments = text.split(/(`[^`]+`|\[[^\]\n]+\]\((?:https?:\/\/|\/(?!\/)|#)[^\s()<>]*(?:\([^\s()<>]*\)[^\s()<>]*)*\)|\*\*[^*]+\*\*)/g);
 
     return segments.map((segment) => {
         if (segment.startsWith("`") && segment.endsWith("`")) {
-            return `<code>${segment.slice(1, -1)}</code>`;
+            return `<code>${escapeHtml(segment.slice(1, -1))}</code>`;
+        }
+        const link = segment.match(/^\[([^\]\n]+)\]\(((?:https?:\/\/|\/(?!\/)|#)[^\s()<>]*(?:\([^\s()<>]*\)[^\s()<>]*)*)\)$/);
+        if (link) {
+            return `<a href="${escapeHtml(link[2])}">${renderInline(link[1])}</a>`;
         }
         if (segment.startsWith("**") && segment.endsWith("**")) {
-            return `<strong>${segment.slice(2, -2)}</strong>`;
+            return `<strong>${renderInline(segment.slice(2, -2))}</strong>`;
         }
-        return segment;
+        return escapeHtml(segment);
     }).join("");
 }
 
@@ -121,6 +124,13 @@ function renderCodeExample(code, options = {}) {
 }
 
 const headingIconMap = new Map([
+    [
+        "⌕",
+        {
+            label: "Geliehene Autorität",
+            svg: `<svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m15.2 15.2 5.3 5.3"></path></svg>`,
+        },
+    ],
     [
         "△",
         {

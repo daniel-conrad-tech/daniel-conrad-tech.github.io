@@ -98,6 +98,10 @@ Tooltips sind hier nur für kurze Klarstellung gedacht.
 - Müssen denselben Begriff tragen wie das `aria-label`
 - Hover und Tastaturfokus sollen sie gleichermaßen sichtbar machen
 
+## Links im Artikeltext
+
+Links im Artikeltext sind dauerhaft unterstrichen, damit sie auch ohne Farbunterschied als Links erkennbar sind. Bei Hover und Tastaturfokus erhalten sie die Akzentfarbe; der sichtbare Fokus bleibt erhalten.
+
 ## Code-UI
 
 Code-Blöcke auf dieser Seite folgen nicht klassischem Syntax-Highlighting. Sie sollen eher Domänensprache als Programmiersprache sichtbar machen.
