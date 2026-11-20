@@ -171,6 +171,13 @@ const headingIconMap = new Map([
         },
     ],
     [
+        "✦",
+        {
+            label: "Agentenregel",
+            svg: `<svg class="section-heading-icon" viewBox="0 0 28 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="14" r="11"></circle><path d="m14 7 2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5Z"></path></svg>`,
+        },
+    ],
+    [
         "✧",
         {
             label: "KI-Bezug",

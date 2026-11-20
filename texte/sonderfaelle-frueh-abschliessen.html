@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Sonderfälle früh abschließen | Daniel Conrad</title>
+        <meta name="description" content="Ein abgeschlossener Sonderfall muss im weiteren Ablauf nicht mehr mitgedacht werden. Wie eine Guard Clause Code lesbarer macht und daraus eine konkrete Regel für Coding-Agenten wird." />
+        <link rel="stylesheet" href="/assets/css/style.css" />
+        <link rel="canonical" href="https://daniel-conrad.tech/texte/sonderfaelle-frueh-abschliessen.html" />
+    </head>
+    <body class="min-h-screen antialiased">
+        <header class="site-header">
+            <a class="logo-mark" href="/">Daniel Conrad</a>
+            <nav class="site-nav">
+                <a class="nav-link" href="/#projekte">Projekte</a>
+                <a class="nav-link" href="/texte/">Texte</a>
+                <a class="nav-link" href="/#kontakt">Kontakt</a>
+            </nav>
+        </header>
+
+        <main class="article-page">
+            <div class="article-topbar">
+                <div class="article-breadcrumb">
+                    <a class="inline-link" href="/texte/">Texte</a>
+                    <span class="article-breadcrumb-separator">/</span>
+                    <span>Sonderfälle früh abschließen</span>
+                </div>
+                <div class="article-actions">
+                    <button
+                        class="article-action-icon"
+                        type="button"
+                        data-copy-link
+                        data-copy-url="https://daniel-conrad.tech/texte/sonderfaelle-frueh-abschliessen.html"
+                        title="Link kopieren"
+                        aria-label="Link kopieren"
+                    >
+                        <svg
+                            class="article-action-svg"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <rect x="9" y="9" width="10" height="10" rx="2"></rect>
+                            <path d="M5 15V7a2 2 0 0 1 2-2h8"></path>
+                        </svg>
+                    </button>
+                    <span class="article-action-status" data-copy-status aria-live="polite"></span>
+                </div>
+            </div>
+            <article>
+                <header class="article-header">
+                    <h1 class="article-title">Sonderfälle früh abschließen</h1>
+                    <p class="article-summary">Ein abgeschlossener Sonderfall muss im weiteren Ablauf nicht mehr mitgedacht werden. Wie eine Guard Clause Code lesbarer macht und daraus eine konkrete Regel für Coding-Agenten wird.</p>
+                    <div class="article-meta">
+                        <time datetime="2026-11-20">20. November 2026</time>
+                        <span class="ai-disclosure" tabindex="0" aria-label="In Zusammenarbeit mit KI erstellt; inhaltlich geprüft und redaktionell verantwortet von Daniel Conrad.">
+                            <span class="ai-disclosure-mark" aria-hidden="true">KI</span>
+                            <span class="ai-disclosure-tooltip" role="tooltip">In Zusammenarbeit mit KI erstellt; inhaltlich geprüft und redaktionell verantwortet von Daniel Conrad.</span>
+                        </span>
+                    </div>
+                    <ul class="article-tags"><li class="article-tag">Softwaredesign</li><li class="article-tag">TypeScript</li><li class="article-tag">Lesbarkeit</li></ul>
+                </header>
+                <div class="article-content">
+                    <p>Wenn ein Sonderfall erledigt ist, sollte der weitere Code ihn nicht mehr berücksichtigen müssen. Eine frühe Rückgabe kann genau das ausdrücken: Dieser Fall ist abgeschlossen. Für alles, was folgt, gilt eine klare Voraussetzung.</p>
+<p>An einem kleinen Renderer für Antwortentwürfe lässt sich zeigen, warum das die Lesbarkeit verbessert – und wie daraus eine konkrete Regel für Coding-Agenten wird.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5 19 18H5Z"></path></svg></span><span class="section-heading-label">Diagnose</span></h2>
+<p>Ein Renderer erstellt den Text für einen Antwortentwurf. Unter die Antwort hängt er den ursprünglichen Nachrichtentext als Zitat. Ist dieser Text leer, besteht der Entwurf nur aus der Antwort.</p>
+<pre class="code-panel" data-code-example="true" data-code-open="true" data-code-label="" data-code-language="ts" data-code-note="Ausgangscode"><code>export class ReplyDraftBodyRenderer {
+    /** Appends the original plaintext as a line-by-line quote; preserves nesting. */
+    render(response: ReplyBody, original: OriginalBody): DraftBody {
+        const originalText = original.toString();
+        const quote = originalText ? originalText.split("\n").map(line =&gt; `&gt; ${line}`).join("\n") : "";
+        return DraftBody.create(quote ? `${response.toString()}\n\n${quote}` : response.toString());
+    }
+}</code></pre>
+<p>Der Code ist kurz. Beim Lesen muss ich trotzdem zweimal eine Entscheidung nachvollziehen: Wird ein Zitat erzeugt? Und wird dieses Zitat an die Antwort angehängt?</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="4.5" width="6" height="6" rx="1.2"></rect><rect x="13.5" y="4.5" width="6" height="6" rx="1.2"></rect><rect x="4.5" y="13.5" width="6" height="6" rx="1.2"></rect><rect x="13.5" y="13.5" width="6" height="6" rx="1.2"></rect></svg></span><span class="section-heading-label">Muster</span></h2>
+<p>Beide Entscheidungen gehen auf dieselbe Voraussetzung zurück: Enthält der Originaltext mindestens ein Zeichen?</p>
+<p>Der erste ternäre Ausdruck erzeugt bei leerem Originaltext eine leere Zeichenkette. Der zweite prüft dieses Zwischenergebnis erneut. Die Information über den Sonderfall wandert dadurch vom Eingangswert in die Variable <code>quote</code>.</p>
+<p>Das funktioniert. Die Regel „Ohne Originaltext genügt die Antwort“ ist allerdings auf zwei Ausdrücke verteilt.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.1"></circle><path d="M12 3.8v2.1"></path><path d="M12 18.1v2.1"></path><path d="m18.2 5.8-1.5 1.5"></path><path d="m7.3 16.7-1.5 1.5"></path><path d="M20.2 12h-2.1"></path><path d="M5.9 12H3.8"></path><path d="m18.2 18.2-1.5-1.5"></path><path d="m7.3 7.3-1.5-1.5"></path><circle cx="12" cy="12" r="7.1"></circle></svg></span><span class="section-heading-label">Mechanik</span></h2>
+<p>Eine <strong>Guard Clause</strong> behandelt den Sonderfall am Anfang. Durch das <strong>Early Return</strong>, die frühe Rückgabe, ist dieser Pfad anschließend abgeschlossen.</p>
+<pre class="code-panel" data-code-example="true" data-code-open="true" data-code-label="" data-code-language="ts" data-code-note="Mit Guard Clause"><code>export class ReplyDraftBodyRenderer {
+    render(response: ReplyBody, original: OriginalBody): DraftBody {
+        const responseText = response.toString();
+        const originalText = original.toString();
+
+        if (!originalText) {
+            return DraftBody.create(responseText);
+        }
+
+        const quote = originalText
+            .split("\n")
+            .map(line =&gt; `&gt; ${line}`)
+            .join("\n");
+
+        return DraftBody.create(`${responseText}\n\n${quote}`);
+    }
+}</code></pre>
+<p>Nach dem <code>if</code> steht fest: Der Originaltext ist nicht leer. Der folgende Code kann ihn zitieren und an die Antwort anhängen, ohne nochmals zwischen beiden Fällen zu unterscheiden.</p>
+<p>Die Methode hat mehr Zeilen. Dafür lässt sich jeder Pfad unmittelbar lesen: Bei leerem Originaltext wird die Antwort zurückgegeben. Im anderen Fall wird das Zitat aufgebaut und angehängt.</p>
+<p>Dabei bleibt die Behandlung des Textes erhalten: Jede mit <code>\n</code> getrennte Zeile bekommt ein zusätzliches <code>&gt; </code>. Aus einer bereits zitierten Zeile <code>&gt; vorher</code> wird <code>&gt; &gt; vorher</code>. Auch Leerzeilen innerhalb eines vorhandenen Textes erhalten das Präfix. Ein Text nur aus Leerzeichen gilt weiterhin als Inhalt; ein zusätzliches <code>trim()</code> würde diese Regel ändern.</p>
+<p>Der Vergleich setzt voraus, dass die <code>toString()</code>-Methoden reine String-Darstellungen liefern. Die neue Fassung liest die Antwort vor dem Original; im Ausgangscode ist die Reihenfolge umgekehrt. Bei Seiteneffekten wäre diese Umstellung gesondert zu prüfen.</p>
+<h3>Würde eine API wie Java Optional helfen?</h3>
+<p>Das Objekt <code>original</code> ist im gezeigten Vertrag vorhanden. Sein Text darf leer sein. Eine API nach dem Vorbild von Java <code>Optional</code> würde hier eine weitere Abstraktion einführen, um diesen leeren String gesondert zu behandeln.</p>
+<p>Für diese lokale Entscheidung reicht der direkte <code>if</code>. Eine zusätzliche Abstraktion hätte dann einen Nutzen, wenn sie einen wiederkehrenden fachlichen Vertrag ausdrückt. Allein das Vermeiden eines <code>if</code> liefert dafür wenig Begründung.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13"></path><path d="m14 4 4 4-4 4"></path><path d="M20 16H7"></path><path d="m10 12-4 4 4 4"></path></svg></span><span class="section-heading-label">Gegenargument</span></h2>
+<p>Für eine einfache Auswahl zwischen zwei Werten ist der ternäre Operator oft gut lesbar:</p>
+<pre class="code-panel" data-code-example="true" data-code-open="true" data-code-label="" data-code-language="ts" data-code-note="Eine lokale Wertauswahl"><code>const label = isExpanded ? "Zuklappen" : "Aufklappen";</code></pre>
+<p>Auch mehrere Rückgabestellen helfen nicht automatisch. In einer langen Methode mit vielen verstreuten Abbrüchen kann der Ablauf schwer zu überblicken sein.</p>
+<p>Im Renderer ist die frühe Rückgabe nützlich, weil sie einen vollständigen Fall abschließt. Danach bleibt ein zusammenhängender Zitierpfad. Das ist der konkrete Gewinn dieses Umbaus.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"></path></svg></span><span class="section-heading-label">Handlungsvorschlag</span></h2>
+<p>Wenn mehrere Bedingungen denselben Sonderfall behandeln, prüfe zuerst: Macht dieser Fall die restliche Verarbeitung überflüssig? Dann schließe ihn früh mit einer Guard Clause ab.</p>
+<p>Lies anschließend den verbleibenden Ablauf von oben nach unten. Jede weitere Bedingung sollte eine eigene Entscheidung treffen müssen. Im Renderer braucht das Anhängen des Zitats keine zweite Prüfung mehr.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 28 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="14" r="11"></circle><path d="m14 7 2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5Z"></path></svg></span><span class="section-heading-label">Agentenregel</span></h2>
+<p>Die folgende Regel lässt sich direkt in eine <code>AGENTS.md</code> übernehmen. Sie beschreibt, wann ein Agent den Ablauf prüfen soll, wie er ihn vereinfachen kann und welches Verhalten erhalten bleiben muss.</p>
+<pre class="code-panel" data-code-example="true" data-code-open="true" data-code-label="" data-code-language="md" data-code-note="Agentenregel für die AGENTS.md"><code>## Sonderfälle früh abschließen
+
+Wenn ein Sonderfall die weitere Verarbeitung überflüssig macht,
+bevorzuge eine Guard Clause mit früher Rückgabe. Der verbleibende
+Ablauf soll ohne erneute Prüfung desselben Falls von oben nach
+unten lesbar sein.
+
+Prüfe besonders auf mehrere bedingte Ausdrücke, die denselben Fall
+direkt oder über Zwischenergebnisse behandeln. Führe diese
+Entscheidung nach Möglichkeit an einer Stelle zusammen.
+
+Verwende ternäre Operatoren für einfache, lokal verständliche
+Wertauswahlen. Führe zusätzliche Abstraktionen nur ein, wenn sie
+einen klaren fachlichen oder technischen Nutzen haben.
+
+Bewahre beim Umbau das Verhalten, einschließlich relevanter
+Auswertungsreihenfolgen und Seiteneffekte.</code></pre>
+<p>Die Regel gibt dem Agenten ein Entscheidungskriterium: Ein Fall soll vollständig abgeschlossen werden können. Die bloße Anzahl ternärer Operatoren oder Rückgabestellen sagt darüber wenig aus.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 28 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 10.6a3.6 3.6 0 1 1 5.7 3c-1.1.8-2.1 1.6-2.1 3"></path><path d="M14 20.6h.01"></path><circle cx="14" cy="14" r="11"></circle></svg></span><span class="section-heading-label">Prüffrage</span></h2>
+<p>Ist nach der frühen Rückgabe klar, welche Voraussetzung für alle folgenden Schritte gilt?</p>
+<p>Hier lautet sie: Der Originaltext enthält mindestens ein Zeichen und wird als Zitat angehängt.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 28 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8.5v7"></path><path d="M14 20.2h.01"></path><circle cx="14" cy="14" r="11"></circle></svg></span><span class="section-heading-label">Signal</span></h2>
+<p>Ein gutes Zeichen: Im Review lässt sich der leere Fall direkt am <code>if</code> erklären. Für den Zitierpfad muss niemand mehr zum ersten ternären Ausdruck zurückspringen, um zu verstehen, warum <code>quote</code> leer sein könnte.</p>
+<p>Wenn nach der Guard Clause derselbe Sonderfall erneut geprüft wird, ist die Vereinfachung noch nicht vollständig.</p>
+                </div>
+            </article>
+        </main>
+        <script src="/assets/js/code-showcase.js" defer></script>
+        <script src="/assets/js/article-actions.js" defer></script>
+
+        <footer class="site-footer">
+            <div class="footer-row">
+                <p>© 2026 Daniel Conrad</p>
+                <nav class="footer-links">
+                    <a class="footer-link" href="/impressum.html">Impressum</a>
+                    <a class="footer-link" href="/datenschutz.html">Datenschutz</a>
+                </nav>
+            </div>
+        </footer>
+    </body>
+</html>

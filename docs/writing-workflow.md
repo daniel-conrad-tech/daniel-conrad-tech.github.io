@@ -39,6 +39,8 @@ Empfohlene feste Struktur im Text:
 
 Nicht jeder Text muss alle Sektionen gleich lang behandeln. Die Schlusssektionen `✓`, `?` und `!` sind jedoch verpflichtend.
 
+Technische Beiträge können nach dem Handlungsvorschlag die Sektion `✦ Agentenregel` enthalten, wenn sich eine belastbare Arbeitsanweisung für Coding-Agenten ableiten lässt. Sie beschreibt Anlass, Vorgehen und Grenzen als kopierbaren Markdown-Codeblock für eine `AGENTS.md`. Das Abschnittsicon zeigt einen vierzackigen Stern im Kreis.
+
 ## Statusmodell
 
 - `draft`
