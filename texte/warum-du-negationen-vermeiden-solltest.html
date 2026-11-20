@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Warum du Negationen vermeiden solltest | Daniel Conrad</title>
-        <meta name="description" content="Eine Bedingung sollte ihre Bedeutung direkt aussprechen. Wie isEmpty() implizite String-Logik ersetzt, wann ausgeschriebene Negationen helfen und wo diese Regel ihre Grenzen hat." />
+        <title>Sein oder nicht sein? | Daniel Conrad</title>
+        <meta name="description" content="Bedingungen sollten sagen, welchen Zustand sie prüfen." />
         <link rel="stylesheet" href="/assets/css/style.css" />
         <link rel="canonical" href="https://daniel-conrad.tech/texte/warum-du-negationen-vermeiden-solltest.html" />
     </head>
@@ -23,7 +23,7 @@
                 <div class="article-breadcrumb">
                     <a class="inline-link" href="/texte/">Texte</a>
                     <span class="article-breadcrumb-separator">/</span>
-                    <span>Warum du Negationen vermeiden solltest</span>
+                    <span>Sein oder nicht sein?</span>
                 </div>
                 <div class="article-actions">
                     <button
@@ -53,8 +53,8 @@
             </div>
             <article>
                 <header class="article-header">
-                    <h1 class="article-title">Warum du Negationen vermeiden solltest</h1>
-                    <p class="article-summary">Eine Bedingung sollte ihre Bedeutung direkt aussprechen. Wie isEmpty() implizite String-Logik ersetzt, wann ausgeschriebene Negationen helfen und wo diese Regel ihre Grenzen hat.</p>
+                    <h1 class="article-title">Sein oder nicht sein?</h1>
+                    <p class="article-summary">Bedingungen sollten sagen, welchen Zustand sie prüfen.</p>
                     <div class="article-meta">
                         <time datetime="2026-11-20">20. November 2026</time>
                         <span class="ai-disclosure" tabindex="0" aria-label="In Zusammenarbeit mit KI erstellt; inhaltlich geprüft und redaktionell verantwortet von Daniel Conrad.">
@@ -62,11 +62,11 @@
                             <span class="ai-disclosure-tooltip" role="tooltip">In Zusammenarbeit mit KI erstellt; inhaltlich geprüft und redaktionell verantwortet von Daniel Conrad.</span>
                         </span>
                     </div>
-                    <ul class="article-tags"><li class="article-tag">Softwaredesign</li><li class="article-tag">TypeScript</li><li class="article-tag">Lesbarkeit</li><li class="article-tag">KI</li></ul>
+                    <ul class="article-tags"><li class="article-tag">Softwaredesign</li><li class="article-tag">TypeScript</li><li class="article-tag">Lesbarkeit</li><li class="article-tag">KI</li><li class="article-tag">Guard Clause</li><li class="article-tag">Kapselung</li></ul>
                 </header>
                 <div class="article-content">
                     <p>Eine Bedingung sollte sagen, welchen Zustand sie prüft. Wenn ich dafür erst einen String als Wahrheitswert lesen und das Ergebnis umkehren muss, kann ein passender Methodenname die Absicht klarer ausdrücken.</p>
-<p>Im Beitrag <a href="/texte/sonderfaelle-frueh-abschliessen.html">Sonderfälle früh abschließen</a> habe ich den leeren Originaltext mit einer Guard Clause behandelt. Der Ablauf wurde dadurch einfacher. An der Bedingung lässt sich weiterarbeiten.</p>
+<p>Im Beitrag <a href="/texte/sonderfaelle-frueh-abschliessen.html">Geh schon mal vor.</a> habe ich den leeren Originaltext mit einer Guard Clause behandelt. Der Ablauf wurde dadurch einfacher. An der Bedingung lässt sich weiterarbeiten.</p>
 <h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5 19 18H5Z"></path></svg></span><span class="section-heading-label">Diagnose</span></h2>
 <p>Der Renderer hängt den Originaltext als Zitat an eine Antwort an. Bei leerem Originaltext genügt die Antwort. Der Anfang der Methode sieht bisher so aus:</p>
 <pre class="code-panel" data-code-example="true" data-code-open="true" data-code-label="" data-code-language="ts" data-code-note="Bisherige Bedingung"><code>render(response: ReplyBody, original: OriginalBody): DraftBody {
@@ -132,7 +132,7 @@
 <h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13"></path><path d="m14 4 4 4-4 4"></path><path d="M20 16H7"></path><path d="m10 12-4 4 4 4"></path></svg></span><span class="section-heading-label">Gegenargument</span></h2>
 <p><code>!isAuthorized()</code> ist für viele Entwickler vertraut und unmittelbar verständlich. Für jeden solchen Ausdruck eine Gegenmethode einzuführen, vergrößert die Schnittstelle. Wird <code>isNotAuthorized()</code> später selbst negiert, entsteht mit <code>!isNotAuthorized()</code> eine doppelte Verneinung. Eine ausgeschriebene Form ist deshalb keine automatische Verbesserung.</p>
 <p>Auch <code>isEmpty()</code> hilft nur, wenn seine Bedeutung klar ist. Zählt ein Text aus Leerzeichen als leer? Gibt es unsichtbares Markup? Der Name stellt die richtige Frage; der Vertrag muss sie beantworten.</p>
-<p>Die Empfehlung gilt dort, wo eine benannte Prüfung Bedeutung erschließt oder eine wiederkehrende Regel bündelt. Eine kurze, vertraute Negation darf bleiben, wenn eine zusätzliche Methode keinen erkennbaren Gewinn bringt. Der Titel zielt auf vermeidbare Übersetzungsarbeit beim Lesen.</p>
+<p>Die Empfehlung gilt dort, wo eine benannte Prüfung Bedeutung erschließt oder eine wiederkehrende Regel bündelt. Eine kurze, vertraute Negation darf bleiben, wenn eine zusätzliche Methode keinen erkennbaren Gewinn bringt. Entscheidend ist die vermeidbare Übersetzungsarbeit beim Lesen.</p>
 <h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"></path></svg></span><span class="section-heading-label">Handlungsvorschlag</span></h2>
 <p>Lies eine Bedingung als Satz über den Anwendungsfall. Prüft sie „Originaltext ist leer“, sollte ein vorhandenes <code>OriginalBody</code> diese Frage beantworten können.</p>
 <p>Prüfe bei negierten Prädikaten zusätzlich, welche Form den behandelten Fall am klarsten benennt. Berücksichtige die bestehenden Aufrufe und Begriffe. Eine neue Methode sollte eine verständliche Frage ausdrücken und einen eindeutigen Vertrag haben.</p>

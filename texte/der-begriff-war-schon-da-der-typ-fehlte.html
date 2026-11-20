@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Primitive Obsession, Baby! | Daniel Conrad</title>
+        <meta name="description" content="Der Begriff war schon da. Der Typ fehlte." />
+        <link rel="stylesheet" href="/assets/css/style.css" />
+        <link rel="canonical" href="https://daniel-conrad.tech/texte/der-begriff-war-schon-da-der-typ-fehlte.html" />
+    </head>
+    <body class="min-h-screen antialiased">
+        <header class="site-header">
+            <a class="logo-mark" href="/">Daniel Conrad</a>
+            <nav class="site-nav">
+                <a class="nav-link" href="/#projekte">Projekte</a>
+                <a class="nav-link" href="/texte/">Texte</a>
+                <a class="nav-link" href="/#kontakt">Kontakt</a>
+            </nav>
+        </header>
+
+        <main class="article-page">
+            <div class="article-topbar">
+                <div class="article-breadcrumb">
+                    <a class="inline-link" href="/texte/">Texte</a>
+                    <span class="article-breadcrumb-separator">/</span>
+                    <span>Primitive Obsession, Baby!</span>
+                </div>
+                <div class="article-actions">
+                    <button
+                        class="article-action-icon"
+                        type="button"
+                        data-copy-link
+                        data-copy-url="https://daniel-conrad.tech/texte/der-begriff-war-schon-da-der-typ-fehlte.html"
+                        title="Link kopieren"
+                        aria-label="Link kopieren"
+                    >
+                        <svg
+                            class="article-action-svg"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <rect x="9" y="9" width="10" height="10" rx="2"></rect>
+                            <path d="M5 15V7a2 2 0 0 1 2-2h8"></path>
+                        </svg>
+                    </button>
+                    <span class="article-action-status" data-copy-status aria-live="polite"></span>
+                </div>
+            </div>
+            <article>
+                <header class="article-header">
+                    <h1 class="article-title">Primitive Obsession, Baby!</h1>
+                    <p class="article-summary">Der Begriff war schon da. Der Typ fehlte.</p>
+                    <div class="article-meta">
+                        <time datetime="2026-11-20">20. November 2026</time>
+                        <span class="ai-disclosure" tabindex="0" aria-label="In Zusammenarbeit mit KI erstellt; inhaltlich geprüft und redaktionell verantwortet von Daniel Conrad.">
+                            <span class="ai-disclosure-mark" aria-hidden="true">KI</span>
+                            <span class="ai-disclosure-tooltip" role="tooltip">In Zusammenarbeit mit KI erstellt; inhaltlich geprüft und redaktionell verantwortet von Daniel Conrad.</span>
+                        </span>
+                    </div>
+                    <ul class="article-tags"><li class="article-tag">Softwaredesign</li><li class="article-tag">TypeScript</li><li class="article-tag">Lesbarkeit</li><li class="article-tag">SLoA</li><li class="article-tag">Primitive Obsession</li></ul>
+                </header>
+                <div class="article-content">
+                    <p>Manchmal verraten die Namen im Code bereits, welche Begriffe dem Modell fehlen. Bei einem Antwortentwurf stehen dort etwa <code>inReplyTo</code> und <code>references</code>. Eine Kennung der beantworteten Nachricht und eine Folge von Nachrichtenverweisen. Zwei Werte mit eigenen Regeln.</p>
+<p>Ihre Typen drücken davon wenig aus.</p>
+<p>In <a href="/texte/eine-liste-sagt-nicht-wofuer-sie-da-ist.html">Eine Liste sagt nicht, wofür sie da ist</a> habe ich das an einer Gästeliste gezeigt: Die Sammlung übernimmt die Regel „jeder Gast höchstens einmal“ und bietet fachliche Operationen wie <code>einladen</code> an. Ihre Aufrufer brauchen die internen Listenoperationen dafür nicht mehr zu kennen.</p>
+<p>Beim Antwortentwurf begegnet mir derselbe Gedanke wieder. <code>ReferenceList</code> ist eine solche fachliche Sammlung. Mit <code>MessageId</code> kommt der einzelne Wert hinzu: Auch eine Kennung kann eigene Regeln besitzen. Die Begriffe stehen bereits in den Namen. Jetzt sollen ihre Typen die Regeln tragen.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5 19 18H5Z"></path></svg></span><span class="section-heading-label">Diagnose</span></h2>
+<p>Der relevante Ausschnitt aus einem Modell für den Gesprächsbezug sieht zunächst so aus:</p>
+<pre class="code-panel" data-code-example="true" data-code-open="true" data-code-label="" data-code-language="ts" data-code-note="Fachliche Namen, primitive Typen"><code>inReplyTo: string;
+references: readonly string[];</code></pre>
+<p><code>inReplyTo</code> heißt bereits: Dieser Wert bezeichnet eine Nachricht. <code>references</code> trägt die Verweiskette des Gesprächs. Im Typvertrag bleiben beide beliebiger Text beziehungsweise eine Liste davon.</p>
+<p>Für das hier betrachtete Modell gelten zusätzliche Regeln: Eine Nachrichtenkennung muss gültig sein. Die Verweisliste behält die Reihenfolge bei und enthält jede Kennung nur einmal. Wer die Werte erzeugt oder weitergibt, muss diese Regeln irgendwo sicherstellen.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="4.5" width="6" height="6" rx="1.2"></rect><rect x="13.5" y="4.5" width="6" height="6" rx="1.2"></rect><rect x="4.5" y="13.5" width="6" height="6" rx="1.2"></rect><rect x="13.5" y="13.5" width="6" height="6" rx="1.2"></rect></svg></span><span class="section-heading-label">Muster</span></h2>
+<p>Dieses Muster heißt <strong>Primitive Obsession</strong>: Fachliche Werte bleiben als Strings, Zahlen oder allgemeine Sammlungen modelliert, obwohl sie eigene Regeln besitzen.</p>
+<p>Die Namen tragen schon Bedeutung. Die Verantwortung für diese Bedeutung bleibt im umgebenden Code. Eine Klasse wie <code>DraftConversation</code> kann dadurch neben dem Gesprächsbezug auch Kennungen prüfen und Listen bereinigen müssen.</p>
+<p>Das ist ein Hinweis auf eine mögliche Grenze im Modell: Welche dieser Regeln gehören zum einzelnen Wert, welche zu seiner Sammlung und welche zum Gespräch?</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.1"></circle><path d="M12 3.8v2.1"></path><path d="M12 18.1v2.1"></path><path d="m18.2 5.8-1.5 1.5"></path><path d="m7.3 16.7-1.5 1.5"></path><path d="M20.2 12h-2.1"></path><path d="M5.9 12H3.8"></path><path d="m18.2 18.2-1.5-1.5"></path><path d="m7.3 7.3-1.5-1.5"></path><circle cx="12" cy="12" r="7.1"></circle></svg></span><span class="section-heading-label">Mechanik</span></h2>
+<p>Der kleine Umbau macht aus den beiden Werten eigene Typen:</p>
+<pre class="code-panel" data-code-example="true" data-code-open="true" data-code-label="" data-code-language="ts" data-code-note="Die Werte erhalten eigene Typen"><code>inReplyTo: MessageId;
+references: ReferenceList;</code></pre>
+<p>Die Schreibweise zeigt das Zielmodell. Der Nutzen entsteht durch die Regeln, die diese Typen anschließend übernehmen:</p>
+<ul><li><code>MessageId</code> validiert die Kennung bei der Erzeugung. Eine erfolgreich erzeugte Instanz erfüllt diese Regel.</li><li><code>ReferenceList</code> verwaltet die geordnete Folge von <code>MessageId</code>-Werten. Beim Ergänzen bleibt die vorhandene Reihenfolge erhalten; eine bereits enthaltene Kennung wird kein zweites Mal eingefügt.</li><li><code>DraftConversation</code> beschreibt den Gesprächsbezug: auf welche Nachricht der Entwurf antwortet und welche Verweiskette dazugehört.</li></ul>
+<p>Ein kleines Beispiel macht die Listenregel sichtbar. Aus den Kennungen A, B und erneut A entsteht die Folge A, B. Das zweite A entfällt, die vorhandenen Einträge behalten ihren Platz. Eine alphabetische Sortierung wäre eine andere Regel und würde diesen Vertrag verändern.</p>
+<p>Dabei zählt der Kennungswert: Zwei getrennt erzeugte <code>MessageId</code>-Objekte mit derselben Kennung gelten für die Deduplizierung als derselbe Verweis.</p>
+<p>Damit erhält jede Entscheidung einen Ort. Ändert sich die Validierungsregel, ist <code>MessageId</code> zuständig. Geht es um das Ergänzen der Verweiskette, ist <code>ReferenceList</code> zuständig. Der Gesprächsbezug verwendet diese Werte über ihre fachlichen Operationen.</p>
+<h3>Eine Abstraktionsebene im aufrufenden Code</h3>
+<p>Hier wirkt <strong>SLOA – Single Level of Abstraction</strong>: Eine Methode soll ihre Schritte auf einer einheitlichen Abstraktionsebene beschreiben. Wenn eine Methode den Gesprächsbezug zusammensetzt und dabei einzelne Zeichen einer Kennung prüft oder Array-Einträge auf Duplikate durchsucht, springt sie zwischen fachlichem Ablauf und dessen Umsetzungsdetails.</p>
+<p>Bei der Typerstellung frage ich deshalb auch: Welche Details muss ich hinter einer passenden Operation bündeln, damit der Aufrufer auf seiner Ebene bleiben kann? <code>DraftConversation</code> arbeitet mit der beantworteten Nachricht und ihrer Verweiskette. <code>ReferenceList</code> kümmert sich um das geordnete Ergänzen von Kennungen. <code>MessageId</code> sichert den gültigen Kennungswert. Die jeweils verwendende Methode kann mit den Zusagen der darunterliegenden Typen arbeiten.</p>
+<p>Die neuen Typen schaffen dafür eine Grenze. Entscheidend bleibt ihre Verwendung: Wenn <code>DraftConversation</code> die Werte gleich wieder in Strings und Arrays zerlegt und die Detailarbeit selbst erledigt, bleiben die Ebenensprünge bestehen. SLOA zeigt sich im Ablauf der Methode; die Typnamen allein stellen es noch nicht her.</p>
+<p><strong>Ein eigener Typ lohnt sich, wenn ein Wert eigene Regeln hat.</strong> Der Gewinn wird daran sichtbar, welche Verantwortung aus dem verwendenden Code verschwinden kann.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13"></path><path d="m14 4 4 4-4 4"></path><path d="M20 16H7"></path><path d="m10 12-4 4 4 4"></path></svg></span><span class="section-heading-label">Gegenargument</span></h2>
+<p>Jeder zusätzliche Typ kostet etwas: Er muss erzeugt, verstanden und an Ein- und Ausgabegrenzen in die passende Darstellung übersetzt werden. Bei einem einfachen Textfeld ohne eigene Regeln kann dieser Aufwand größer sein als der Nutzen.</p>
+<p>Die Kürze einer Prüfung reicht als Gegenargument hier nicht aus. Auch eine einzelne Zeichenprüfung kann in einer Methode, die den Gesprächsbezug beschreibt, einen Ebenensprung erzeugen. Bei <code>MessageId</code> und <code>ReferenceList</code> kommen zwei Gründe zusammen: Die Werte haben eigene Regeln, und ihre Typen halten die Details dieser Regeln aus dem fachlichen Ablauf heraus.</p>
+<p>Eine lokale Prüfung kann passen, wenn sie zur Abstraktionsebene der Methode gehört – etwa die Zeichenprüfung innerhalb der Kennungsvalidierung. Ihre Länge allein entscheidet darüber nicht.</p>
+<p>Auch SLOA schreibt für jede tiefere Abstraktionsebene keinen eigenen Typ vor. Eine private Hilfsmethode kann genügen, um Details aus einem Ablauf herauszuhalten. Der eigene Typ ist hier begründet, weil Kennung und Verweisliste jeweils einen eigenen Vertrag tragen, der auch bei ihrer weiteren Verwendung gelten soll.</p>
+<p>Auch die neue Schreibweise allein garantiert wenig. Ein TypeScript-Alias wie <code>type MessageId = string</code> führt weder eine Validierung aus noch verhindert er die Übergabe beliebiger Strings. Das <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-aliases">TypeScript-Handbook zu Typaliasen</a> erklärt diese Gleichbehandlung mit dem ursprünglichen Typ. Für die hier beschriebene Garantie braucht es eine kontrollierte Erzeugung und eine API, über die gültige Werte gültig bleiben.</p>
+<p>Dasselbe gilt für die Sammlung: Wenn Aufrufer weiterhin das zugrunde liegende Array verändern können, lässt sich ihre Deduplizierung umgehen. Der Typ muss die Regel auch bei späteren Änderungen bewahren.</p>
+<p>Der Maßstab ist deshalb die konkrete Verantwortung. Für dieses Beispiel sind das die Validierung einer Kennung und der geordnete, duplikatfreie Aufbau der Verweisliste.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"></path></svg></span><span class="section-heading-label">Handlungsvorschlag</span></h2>
+<p>Suche bei einem fachlich benannten String oder Array nach der Regel, die beim Erzeugen oder Verwenden eingehalten werden muss. Wähle einen Wert aus, dessen eigene Regel du klar benennen kannst.</p>
+<p>Verlagere diese Regel in den passenden Typ. Entferne danach die entsprechende Prüfung oder Listenlogik aus dem Aufrufer. Prüfe beim Umbau, dass die bisher beabsichtigte Behandlung ungültiger Eingaben, die Reihenfolge und das Verhalten bei Duplikaten erhalten bleiben. Neue Regeln sind eine eigene Verhaltensänderung.</p>
+<p>Lies die aufrufende Methode anschließend auf Ebenensprünge: Beschreibt sie durchgehend den Gesprächsbezug, oder wechselt sie noch zu Stringprüfung und Array-Verwaltung? Wähle die Operationen der neuen Typen so, dass der fachliche Ablauf auf seiner Ebene lesbar bleibt.</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 28 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="14" r="11"></circle><path d="m14 7 2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5Z"></path></svg></span><span class="section-heading-label">Agentenregel</span></h2>
+<pre class="code-panel" data-code-example="true" data-code-open="true" data-code-label="" data-code-language="md" data-code-note="Agentenregel für die AGENTS.md"><code>## Fachliche Werte mit eigenen Regeln modellieren
+
+Prüfe fachlich benannte primitive Werte und Sammlungen darauf,
+ob sie eigene Validierungs- oder Verarbeitungsregeln besitzen.
+Wenn ein eigener Typ diese Regeln bündelt und seine Aufrufer
+vereinfacht, schlage ihn als gezielten Umbau vor.
+
+Ordne Regeln des einzelnen Werts diesem Wert zu. Ordne Regeln
+über Reihenfolge und Duplikate dem Sammlungstyp zu.
+Sichere die Regeln bei Erzeugung und späteren Änderungen ab.
+
+Wende SLOA auf die aufrufenden Methoden an: Ihre Schritte sollen
+auf einer einheitlichen Abstraktionsebene liegen. Bündle Details
+hinter passenden Operationen der neuen Typen. Prüfe, ob ein
+Aufrufer weiterhin zwischen fachlichem Ablauf und String- oder
+Collection-Details wechselt. Für reine Ablaufdetails kann eine
+Hilfsmethode genügen; begründe eigene Typen mit ihrem Vertrag.
+
+Entferne die dadurch überflüssige Logik aus den Aufrufern.
+Begründe den Typ mit der konkreten Regel und dem entfallenden
+Wissen beim Aufrufer. Wäge diesen Nutzen gegen den Aufwand ab.
+
+Bewahre die beabsichtigte Behandlung ungültiger Eingaben,
+die Reihenfolge und die Deduplizierungsregel. Kennzeichne
+gewünschte Verhaltensänderungen ausdrücklich.</code></pre>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 28 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 10.6a3.6 3.6 0 1 1 5.7 3c-1.1.8-2.1 1.6-2.1 3"></path><path d="M14 20.6h.01"></path><circle cx="14" cy="14" r="11"></circle></svg></span><span class="section-heading-label">Prüffrage</span></h2>
+<p>Welche konkrete Regel garantiert der neue Typ, die seine Aufrufer bisher selbst einhalten mussten?</p>
+<p>Bei <code>MessageId</code> ist es die Gültigkeit der Kennung. Bei <code>ReferenceList</code> sind es die Reihenfolge und der Umgang mit Duplikaten. Daraus lässt sich prüfen, ob der Umbau Verantwortung tatsächlich an einen klaren Ort gebracht hat.</p>
+<p>Kann die aufrufende Methode dadurch auf einer Abstraktionsebene bleiben, oder muss sie weiterhin in die Darstellung der Werte hinabsteigen?</p>
+<h2 class="section-heading"><span class="section-heading-mark"><svg class="section-heading-icon" viewBox="0 0 28 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8.5v7"></path><path d="M14 20.2h.01"></path><circle cx="14" cy="14" r="11"></circle></svg></span><span class="section-heading-label">Signal</span></h2>
+<p>Ein gutes Zeichen: Im Review lässt sich jede Wertregel einem Typ zuordnen. In <code>DraftConversation</code> entfällt die entsprechende Validierung oder Listenbereinigung. Eine Änderung an diesen Regeln hat einen klaren Ausgangspunkt.</p>
+<p>Der aufrufende Ablauf lässt sich als Folge fachlicher Schritte lesen. Zum Verständnis des Gesprächsbezugs muss der Leser keine Zeichenprüfung oder Duplikatsuche mehr nachvollziehen.</p>
+<p>Wenn Aufrufer nach dem Umbau weiter Kennungen prüfen und Arrays selbst deduplizieren müssen, lohnt sich ein Blick auf die neue API: Welche Garantie fehlt ihr noch?</p>
+                </div>
+            </article>
+        </main>
+        <script src="/assets/js/code-showcase.js" defer></script>
+        <script src="/assets/js/article-actions.js" defer></script>
+
+        <footer class="site-footer">
+            <div class="footer-row">
+                <p>© 2026 Daniel Conrad</p>
+                <nav class="footer-links">
+                    <a class="footer-link" href="/impressum.html">Impressum</a>
+                    <a class="footer-link" href="/datenschutz.html">Datenschutz</a>
+                </nav>
+            </div>
+        </footer>
+    </body>
+</html>

@@ -88,6 +88,7 @@ Ein Text darf `ai-approved` sein, wenn:
 - der Handlungsvorschlag konkret ist
 - die Prüffrage wirklich trennt statt nur rhetorisch zu wirken
 - das Signal im Alltag beobachtbar ist
+- alle im Artikel vorkommenden Prinzipien und benannten Muster als Tags vollständig und in einheitlicher Schreibweise erfasst sind
 - keine Platzhalter mehr enthalten sind
 - der Text mehr Erkenntnis als Pose liefert
 
@@ -141,6 +142,10 @@ Jeder Text braucht im Frontmatter:
 ## Tag-Schreibweise
 
 Tags werden als lesbare Begriffe geschrieben und beginnen mit einem Großbuchstaben. Deutsche Zusammensetzungen folgen der normalen Rechtschreibung; Eigennamen und technische Bezeichnungen behalten ihre übliche Schreibweise, zum Beispiel `Java` oder `KI`. Derselbe Begriff wird im gesamten Archiv einheitlich geschrieben.
+
+Alle im Artikel vorkommenden Prinzipien werden als Tags erfasst. Dasselbe gilt für benannte Entwurfsmuster und Antimuster, etwa `Primitive Obsession`. Die Regel gilt auch, wenn ein Prinzip im Gegenargument eingeordnet oder begrenzt wird. Allgemeine Themen-Tags können diese Tags ergänzen.
+
+Für Single Level of Abstraction lautet der einheitliche Tag `SLoA`. Abkürzung und ausgeschriebener Name erhalten keinen doppelten Tag. Die KI prüft vor ihrer Freigabe die Vollständigkeit und einheitliche Schreibweise der Prinzipien- und Muster-Tags und hält das Ergebnis in `ai_review_notes` fest.
 
 ## Harte Blocker
 
